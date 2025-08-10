@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ElevatorConstants.ElevState;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
@@ -46,6 +47,7 @@ public class RobotContainer {
 
   private final Elevator elevator = new Elevator();
 
+  private ElevState currentElevState = ElevState.STOW;
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -109,7 +111,7 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
 
-    elevator.setDefaultCommand(new ElevatorCommand(elevator, controls));
+    elevator.setDefaultCommand(new ElevatorCommand(elevator, controls, currentElevState));
 
   }
 

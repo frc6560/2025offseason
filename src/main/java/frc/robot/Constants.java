@@ -61,22 +61,25 @@ public final class Constants
 
     public static final double kMaxV = 2;
     public static final double kMaxA = 5;
+
+    public static final double kG = 0;
     
-      public static final class State{
+      
         
         public static enum ElevState {
-          L1ORSTOW(1),
-          L2(2),
-          L3(3),
-          L4(4),
-          REMOVEBALLL2(5),
-          REMOVEBALLL3(6),
-          SHOOTBALL(7);
+          L2BALL(HeightToRotations(32 + 8.125)),
+          L3BALL(HeightToRotations(47.625 + 8.125)),
+          SHOOTBALL(HeightToRotations(76 + 8.125)),
+          STOW(HeightToRotations(18));
         
 
           public final double elevatorSetPoint;
           private ElevState(double elevatorSetpoint) {
             this.elevatorSetPoint = elevatorSetpoint;
+          }
+
+          public double getValue() {
+            return elevatorSetPoint;
           }
 
         }
@@ -96,7 +99,7 @@ public final class Constants
         public static final double REMOVEBALLL2 = /*4*/ HeightToRotations(32 + 8.125);
         public static final double REMOVEBALLL3 = /*8*/ HeightToRotations(47.625 + 8.125);
         public static final double SHOOTBALL = /*18*/ HeightToRotations(76 + 8.125);
-      }
+      
     
   }
 

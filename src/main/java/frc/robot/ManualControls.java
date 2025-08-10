@@ -59,15 +59,15 @@ public class ManualControls {
         return secondXbox.getAButton();
     }
 
-    public boolean goToL2(){
+    public boolean goToL2Ball(){
         return secondXbox.getXButton();
     }
 
-    public boolean goToL3(){
+    public boolean goToL3Ball(){
         return secondXbox.getBButton();
     }
 
-    public boolean goToL4(){
+    public boolean goToShootBall(){
         return secondXbox.getYButton();
     }
 
