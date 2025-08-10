@@ -41,4 +41,63 @@ public final class Constants
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
+
+  public static final class ElevatorConstants {
+    
+    //unknown
+    public static int ElevLeftCanID = 0;
+    public static int ElevRightCanID = 0;
+    
+    public static final int TopLimitSwitchID = 0;
+    public static final int BotLimitSwitchID = 0;
+
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
+
+    public static final double kP = 0.8;
+    public static final double kI = 0.2;
+    public static final double kD = 0.1;
+
+    public static final double kMaxV = 2;
+    public static final double kMaxA = 5;
+    
+      public static final class State{
+        
+        public static enum ElevState {
+          L1ORSTOW(1),
+          L2(2),
+          L3(3),
+          L4(4),
+          REMOVEBALLL2(5),
+          REMOVEBALLL3(6),
+          SHOOTBALL(7);
+        
+
+          public final double elevatorSetPoint;
+          private ElevState(double elevatorSetpoint) {
+            this.elevatorSetPoint = elevatorSetpoint;
+          }
+
+        }
+
+        public static double HeightToRotations(double TargetHeight) {
+          return ((TargetHeight-WristHeightOffGround)/NumInPerRot);
+        } 
+
+        //placeholder
+        public static final double NumInPerRot = 13.4962820398;
+        public static final double WristHeightOffGround = 17;
+        //need to be tested
+        public static final double L1ORSTOW = HeightToRotations(18);
+        public static final double L2 = /*5*/ HeightToRotations(32);
+        public static final double L3 = /*10*/HeightToRotations(47.625);
+        public static final double L4 = /*15*/ HeightToRotations(72);
+        public static final double REMOVEBALLL2 = /*4*/ HeightToRotations(32 + 8.125);
+        public static final double REMOVEBALLL3 = /*8*/ HeightToRotations(47.625 + 8.125);
+        public static final double SHOOTBALL = /*18*/ HeightToRotations(76 + 8.125);
+      }
+    
+  }
+
 }
