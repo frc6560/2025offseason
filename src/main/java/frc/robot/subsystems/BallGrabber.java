@@ -1,5 +1,5 @@
 
-package com.team6560.frc2025.subsystems;
+package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
