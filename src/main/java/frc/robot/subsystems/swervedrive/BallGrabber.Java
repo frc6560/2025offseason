@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.team6560.frc2025.Constants;
 
 public class BallGrabber extends SubsystemBase {
-    private SparkMax grabberMotor; 
+    private TalonFX grabberMotor; 
     
 
     private static final int GRABBER_MOTOR_ID = 25;
@@ -29,7 +29,7 @@ public class BallGrabber extends SubsystemBase {
     private static final double MAX_CURRENT_RUNNING = 30; 
     private static final double GAMEPEICE_CURRENT = 20; //  threshold to detect if a ball is present
     public BallGrabber() {
-        this.grabberMotor = new SparkMax(GRABBER_MOTOR_ID, MotorType.kBrushless);
+        this.grabberMotor = new TalonFX(GRABBER_MOTOR_ID, MotorType.kBrushless);
         ntDispTab("Ball Grabber")
             .add("Ball Grabber Current", () -> grabberMotor.getOutputCurrent())
             .add("Ball Grabber Voltage", () -> grabberMotor.getBusVoltage())
