@@ -58,7 +58,7 @@ public class ElevatorCommand extends Command{
         double currentPosition = elevator.getElevatorHeight();
 
         TrapezoidProfile.State nextSetpoint = currentTrapezoidProfile.calculate(
-            0.5, 
+            0.02, 
             elevator.getSetpoint(), 
             elevator.getGoal());
         
