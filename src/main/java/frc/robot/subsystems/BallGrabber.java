@@ -65,7 +65,7 @@ public class BallGrabber extends SubsystemBase {
 
 public void periodic(){
 
-    double range = grabberMotorRange.getDistance().getValue().;
+    double range = (double) grabberMotorRange.getDistance().getValue().;
     if((range > BALL_DETECTION_THRESHOLD && grabberMotor.getStatorCurrent() < MAX_CURRENT_RUNNING)){
         grabberMotor.set(-0.1);
         SmartDashboard.putBoolean("Ball Detected", true);
@@ -78,7 +78,7 @@ public void periodic(){
     }
 }
 public void runIntakeOuttake(){
-    range = grabberMotorRange.getDistance().getValue();
+    double range = (double) grabberMotorRange.getDistance().getValue();
     if((range > BALL_DETECTION_THRESHOLD && range < MAX_CURRENT_RUNNING)){
         grabberMotor.set(OUTTAKE_SPEED);
     } else{
