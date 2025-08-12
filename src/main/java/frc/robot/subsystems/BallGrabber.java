@@ -17,8 +17,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.configs.CANrangeConfiguration;
 // import com.robot.Constants; 
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -46,30 +48,32 @@ public class BallGrabber extends SubsystemBase {
     private static final double OUTTAKE_SPEED = 0.7; 
 
     private static final double MAX_CURRENT_RUNNING = 30; 
-    private static final double BALL_DETECTION_THRESHOLD = 20; //  threshold to detect if a ball is present
+    private static final double BALL_DETECTION_DISTANCE = 20; //  threshold to detect if a ball is present
+    
 
 
-  private final NetworkTable ntTable = NetworkTableInstance.getDefault().getTable("BallGrabber");
-  private final NetworkTableEntry ntCurrent = ntTable.getEntry("Ball Grabber Current");
-  private final NetworkTableEntry ntVoltage = ntTable.getEntry("Ball Grabber Voltage");
-  private final NetworkTableEntry ntSpeed = ntTable.getEntry("Ball Grabber Speed");
-  private final NetworkTableEntry ntDutyCycle = ntTable.getEntry("Ball Grabber Velocity");
+
+//   private final NetworkTable ntTable = NetworkTableInstance.getDefault().getTable("BallGrabber");
+//   private final NetworkTableEntry ntCurrent = ntTable.getEntry("Ball Grabber Current");
+//   private final NetworkTableEntry ntVoltage = ntTable.getEntry("Ball Grabber Voltage");
+//   private final NetworkTableEntry ntSpeed = ntTable.getEntry("Ball Grabber Speed");
+//   private final NetworkTableEntry ntDutyCycle = ntTable.getEntry("Ball Grabber Velocity");
 
     public BallGrabber() {
        this.grabberMotor = new TalonFX(1, "grabberMotorRange");
        this.grabberMotorRange = new CANrange(0); 
        
 
-}
+    }
 
 
 public void periodic(){
 
-    double range = (double) grabberMotorRange.getDistance().getValue().;
-    if((range > BALL_DETECTION_THRESHOLD && grabberMotor.getStatorCurrent() < MAX_CURRENT_RUNNING)){
+    var range = grabberMotorRange.getDistance().getValueAsDouble();
+    if((range < BALL_DETECTION_DISTANCE && grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING)){
         grabberMotor.set(-0.1);
         SmartDashboard.putBoolean("Ball Detected", true);
-    } else if (range < GAMEPEICE_CURRENT) {
+    } else if (range > BALL_DETECTION_DISTANCE) {
         SmartDashboard.putBoolean("Ball Detected", false);
         grabberMotor.set(0.1);
     }
@@ -78,8 +82,8 @@ public void periodic(){
     }
 }
 public void runIntakeOuttake(){
-    double range = (double) grabberMotorRange.getDistance().getValue();
-    if((range > BALL_DETECTION_THRESHOLD && range < MAX_CURRENT_RUNNING)){
+ var range = grabberMotorRange.getDistance().getValueAsDouble();
+    if((range < BALL_DETECTION_DISTANCE && grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING)){
         grabberMotor.set(OUTTAKE_SPEED);
     } else{
         grabberMotor.set(INTAKE_SPEED);
