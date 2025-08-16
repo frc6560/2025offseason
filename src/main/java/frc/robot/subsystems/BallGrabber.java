@@ -73,6 +73,7 @@ public void periodic(){
     if((range < BALL_DETECTION_DISTANCE && grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING)){
         grabberMotor.set(-0.1);
         SmartDashboard.putBoolean("Ball Detected", true);
+        System.out.println("ball detect");
     } else if (range > BALL_DETECTION_DISTANCE) {
         SmartDashboard.putBoolean("Ball Detected", false);
         grabberMotor.set(0.1);
@@ -80,6 +81,7 @@ public void periodic(){
     else{
         grabberMotor.set(0.1); 
     }
+    
 }
 public void runIntakeOuttake(){
  var range = grabberMotorRange.getDistance().getValueAsDouble();
