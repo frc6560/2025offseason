@@ -41,12 +41,34 @@ public class Elevator extends SubsystemBase{
     public TrapezoidProfile.State elevGoalState = new TrapezoidProfile.State();
     public TrapezoidProfile.State elevSetpointState = new TrapezoidProfile.State(); 
 
-    private final PIDController pidContrller = new PIDController(
+    private final PIDController pidController = new PIDController(
         ElevatorConstants.kP,
         ElevatorConstants.kI,
-        ElevatorConstants.kD);
+        ElevatorConstants.kD
+    );
     
+    public enum WantedState {
+        Stow,
+        L2Ball,
+        L3Ball,
+        ShootBall,
+        Idle,
+        MoveToPosition,
+        GroundBall,
+    }
+
+    public enum SystemState {
+        Idling,
+        MovingToPosition
+    }
+
+    private WantedState wantedState = WantedState.Idle;
+    private WantedState previousWantedState = WantedState.Idle;
+    private SystemState systemState = SystemState.Idling;
+
     public Elevator() {
+
+        
 
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -98,6 +120,10 @@ public class Elevator extends SubsystemBase{
         return elevGoalState;
     }
 
+    public double getGoalValue() {
+        return elevGoalState.position;
+    }
+
     public TrapezoidProfile.Constraints getConstraints() {
         return elevConstraints;
     }
@@ -117,5 +143,9 @@ public class Elevator extends SubsystemBase{
 
     public double getElevatorHeight() {
         return ElevLeft.getPosition().getValueAsDouble();
+    }
+
+    public void setWantedState(WantedState wantedState) {
+        this.wantedState = wantedState;
     }
 }

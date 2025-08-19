@@ -70,7 +70,8 @@ public final class Constants
           L2BALL(HeightToRotations(32 + 8.125)),
           L3BALL(HeightToRotations(47.625 + 8.125)),
           SHOOTBALL(HeightToRotations(76 + 8.125)),
-          STOW(HeightToRotations(18));
+          STOW(HeightToRotations(18)),
+          GROUNDBALL(HeightToRotations(20));
         
 
           public final double elevatorSetPoint;
