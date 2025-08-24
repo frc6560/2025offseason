@@ -35,7 +35,7 @@ import static edu.wpi.first.units.Units.Degree;
 public class BallGrabber extends SubsystemBase {
     private final TalonFX grabberMotor; 
 
-    private final CANrange grabberMotorRange; // Range for TalonFX IDs
+   // private final CANrange grabberMotorRange; // Range for TalonFX IDs
 
     // encoder stuff
   //private CANcoder m_relativeEncoder;
@@ -60,8 +60,9 @@ public class BallGrabber extends SubsystemBase {
 //   private final NetworkTableEntry ntDutyCycle = ntTable.getEntry("Ball Grabber Velocity");
 
     public BallGrabber() {
-       this.grabberMotor = new TalonFX(1, "grabberMotorRange");
-       this.grabberMotorRange = new CANrange(0); 
+       //this.grabberMotor = new TalonFX(1, "grabberMotorRange");
+       this.grabberMotor = new TalonFX(1); 
+      // this.grabberMotorRange = new CANrange(0); 
        
 
     }
@@ -69,14 +70,15 @@ public class BallGrabber extends SubsystemBase {
 
 public void periodic(){
 
-    var range = grabberMotorRange.getDistance().getValueAsDouble();
-    if((range < BALL_DETECTION_DISTANCE && grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING)){
+   // var range = grabberMotorRange.getDistance().getValueAsDouble();
+    //if((range < BALL_DETECTION_DISTANCE && 
+    if(grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING){
         grabberMotor.set(-0.1);
         SmartDashboard.putBoolean("Ball Detected", true);
         System.out.println("ball detect");
-    } else if (range > BALL_DETECTION_DISTANCE) {
-        SmartDashboard.putBoolean("Ball Detected", false);
-        grabberMotor.set(0.1);
+   // } else if (range > BALL_DETECTION_DISTANCE) {
+        //SmartDashboard.putBoolean("Ball Detected", false);
+        //grabberMotor.set(0.1);
     }
     else{
         grabberMotor.set(0.5); 
@@ -85,8 +87,9 @@ public void periodic(){
     
 }
 public void runIntakeOuttake(){
- var range = grabberMotorRange.getDistance().getValueAsDouble();
-    if((range < BALL_DETECTION_DISTANCE && grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING)){
+ //var range = grabberMotorRange.getDistance().getValueAsDouble();
+   // if((range < BALL_DETECTION_DISTANCE && 
+    if(grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING){
         grabberMotor.set(OUTTAKE_SPEED);
     } else{
         grabberMotor.set(INTAKE_SPEED);
@@ -107,3 +110,4 @@ public double getDutyCycle() {
     return grabberMotor.get(); 
 }
 }
+
