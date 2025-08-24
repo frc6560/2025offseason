@@ -38,9 +38,9 @@ public class BallGrabber extends SubsystemBase {
     private final CANrange grabberMotorRange; // Range for TalonFX IDs
 
     // encoder stuff
-  private CANcoder m_relativeEncoder;
-  private double initialEncoderPos;
-  private TalonFXConfiguration fxConfig;
+  //private CANcoder m_relativeEncoder;
+  //private double initialEncoderPos;
+ // private TalonFXConfiguration fxConfig;
     
 
 
@@ -79,7 +79,8 @@ public void periodic(){
         grabberMotor.set(0.1);
     }
     else{
-        grabberMotor.set(0.1); 
+        grabberMotor.set(0.5); 
+        System.out.println("WORK");
     }
     
 }
