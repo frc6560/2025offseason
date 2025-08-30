@@ -1,7 +1,8 @@
 package frc.robot.subsystems;
 
-
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 
@@ -18,7 +19,6 @@ public class PipeGrabber extends SubsystemBase {
 
     public PipeGrabber() {
         this.grabberMotor = new SparkFlex(GRABBER_MOTOR_ID, MotorType.kBrushless);
-    
     }
 
     public void runIntake(){
@@ -33,9 +33,17 @@ public class PipeGrabber extends SubsystemBase {
         // }
     }
 
+    public void runIntakeMaxSpeed() {
+        grabberMotor.set(1.0);
+    }
+
     public void runGrabberOuttake(){
         grabberMotor.set(OUTTAKE_SPEED);
         // System.out.println("Worked");
+    }
+
+    public void runGrabberOuttakeMaxSpeed() {
+        grabberMotor.set(-1.0);
     }
 
     public void stop() {
