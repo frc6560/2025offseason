@@ -4,78 +4,79 @@ import frc.robot.subsystems.Arm;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.Arm.State;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.ManualControls;
+import frc.robot.commands.keyboardControls;
 
 public class ArmCommand extends Command {
     private final Arm arm;
-    private final ManualControls manualControls;
-    private State targetState;
-
-    public ArmCommand(Arm arm, ManualControls manualControls) {
+    private final keyboardControls keyboardControls;
+    public State target_state;
+    
+    public ArmCommand(Arm arm, keyboardControls keyboardControls) {
         this.arm = arm;
-        this.manualControls = manualControls;
+        this.keyboardControls = keyboardControls;
         addRequirements(arm);
     }
 
     @Override
     public void initialize() {
-        arm.setGoal(ArmConstants.STOW_POSITION_DEG); // Initialize arm to stowed position
-        targetState = Arm.State.STOW;
+        arm.setGoal(ArmConstants.STOW_POSITION_DEG); // Use the correct constant name
+        target_state = Arm.State.STOW; // Set initial target state to STOW
     }
 
     @Override
     public void execute() {
-        // Check manual controls for desired state
-        if (manualControls.goToStow()) {
-            targetState = Arm.State.STOW;
-        } else if (manualControls.goToPickup()) {
-            targetState = Arm.State.PICKUP;
-        } else if (manualControls.goToReef()) {
-            targetState = Arm.State.REEF;
-        } else if (manualControls.goToGround()) {
-            targetState = Arm.State.GROUND;
-        } else if (manualControls.goToProcessor()) {
-            targetState = Arm.State.PROCESSOR;
-        } else {
-            targetState = Arm.State.IN_MOTION;
+        // Debug output to see what's happening
+        if (keyboardControls.goToStow()) {
+            System.out.println("STOW button pressed!");
+            target_state = Arm.State.STOW;
+        } else if (keyboardControls.goToPickup()) { // Fixed: lowercase 'g'
+            System.out.println("PICKUP button pressed!");
+            target_state = Arm.State.PICKUP;
+        } else if (keyboardControls.goToReef()) { // Fixed: lowercase 'g'
+            System.out.println("REEF button pressed!");
+            target_state = Arm.State.REEF;
+        } else if (keyboardControls.goToGround()) { // Fixed: lowercase 'g'
+            System.out.println("GROUND button pressed!");
+            target_state = Arm.State.GROUND;
+        } else if (keyboardControls.goToProcessor()) { // Fixed: lowercase 'g'
+            System.out.println("PROCESSOR button pressed!");
+            target_state = Arm.State.PROCESSOR;
         }
-
-        // Pick target angle based on state
-        double targetAngleDeg;
-        switch (targetState) {
+        
+        double targetAngle;
+        switch (target_state) {
             case STOW:
-                targetAngleDeg = ArmConstants.STOW_POSITION_DEG;
+                targetAngle = ArmConstants.STOW_POSITION_DEG;
                 break;
             case PICKUP:
-                targetAngleDeg = ArmConstants.PICKUP_POSITION_DEG;
+                targetAngle = ArmConstants.PICKUP_POSITION_DEG;
                 break;
             case REEF:
-                targetAngleDeg = ArmConstants.REEF_POSITION_DEG;
+                targetAngle = ArmConstants.REEF_POSITION_DEG; 
                 break;
             case GROUND:
-                targetAngleDeg = ArmConstants.GROUND_PICKUP_DEG;
+                targetAngle = ArmConstants.GROUND_PICKUP_DEG; 
                 break;
             case PROCESSOR:
-                targetAngleDeg = ArmConstants.PROCESSOR_DEG;
+                targetAngle = ArmConstants.PROCESSOR_DEG; 
                 break;
             case IN_MOTION:
+                return; 
             default:
-                // If moving or unknown, hold current position
-                targetAngleDeg = arm.getArmAngleDeg();
-                break;
+                return; 
         }
 
-        // Send goal to arm subsystem
-        arm.setGoal(targetAngleDeg);
+        // Command arm to move to target position
+        arm.setGoal(targetAngle);
     }
 
     @Override
     public boolean isFinished() {
-        return false; // Runs until interrupted
+        return false; 
     }
 
     @Override
     public void end(boolean interrupted) {
-        arm.setGoal(arm.getArmAngleDeg()); // Hold current position when command ends
+        
     }
 }

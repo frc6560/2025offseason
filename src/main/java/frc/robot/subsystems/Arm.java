@@ -32,13 +32,25 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+
+
 
 public class Arm extends SubsystemBase{
     
+    private double simAngleDeg = 90; // start straight up
+
     private TalonFX armMotor;
     private DutyCycleEncoder absoluteEncoder;
 
@@ -56,6 +68,14 @@ public class Arm extends SubsystemBase{
     private final NetworkTableEntry ntPosition = ntTable.getEntry("Arm position");
     private final NetworkTableEntry ntTargetPos = ntTable.getEntry("Target angle");
 
+    // Mechanism2d visualization
+    private final Mechanism2d mech = new Mechanism2d(60, 60);
+    private final MechanismRoot2d root = mech.getRoot("ArmRoot", 30, 5); // pivot at bottom
+    private final MechanismLigament2d armLigament = 
+        root.append(new MechanismLigament2d("Arm", 20, 90)); // length=20, angle=90°
+    
+
+
     public enum State {
         STOW,
         PICKUP,
@@ -64,16 +84,20 @@ public class Arm extends SubsystemBase{
         PROCESSOR,
         IN_MOTION
     }
-
     public Arm() {
       armMotor = new TalonFX(ArmConstants.MOTOR_ID);
       TalonFXConfiguration config = new TalonFXConfiguration();
       config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
       armMotor.getConfigurator().apply(config);
-
-    // PID settings
-    pid.setTolerance(1.0); // 1 degree tolerance
-    }
+  
+      // PID settings
+      pid.setTolerance(1.0);
+  
+      // Publish Mechanism2d to SmartDashboard
+      SmartDashboard.putData("ArmMech2d", mech);
+  }
+  
+  
 
     public void setGoal(double goalStateDeg) {
       goal = new TrapezoidProfile.State(Math.toRadians(goalStateDeg), 0);
@@ -97,6 +121,10 @@ public class Arm extends SubsystemBase{
       }
 
     public double getArmAngleDeg() {
+
+      if (RobotBase.isSimulation()) {
+        return simAngleDeg;
+      } else{
         // Rotor position comes in *rotations of the motor shaft*
         double motorRotations = armMotor.getRotorPosition().getValueAsDouble();
         ;
@@ -107,6 +135,8 @@ public class Arm extends SubsystemBase{
         // Convert to degrees
         return armRotations * 360.0;
       }
+}
+
 
     public State getState(){
         // Determine the current state of the arm based on its position
@@ -151,9 +181,14 @@ public void periodic() {
   ntAngle.setDouble(getArmAngleDeg());
   ntPosition.setDouble(getArmAngleDeg());
   ntTargetPos.setDouble(Math.toDegrees(setpoint.position));
+  armLigament.setAngle(getArmAngleDeg());
+
+
 }
 
-      
+
+
+
 
 
 }
