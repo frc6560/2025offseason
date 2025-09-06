@@ -68,28 +68,27 @@ public class BallGrabber extends SubsystemBase {
     }
 
 
-public void periodic(){
+// public void periodic(){
 
-   // var range = grabberMotorRange.getDistance().getValueAsDouble();
-    //if((range < BALL_DETECTION_DISTANCE && 
-    if(grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING){
-        grabberMotor.set(-0.1);
-        SmartDashboard.putBoolean("Ball Detected", true);
-        System.out.println("ball detect");
-   // } else if (range > BALL_DETECTION_DISTANCE) {
-        //SmartDashboard.putBoolean("Ball Detected", false);
-        //grabberMotor.set(0.1);
-    }
-    else{
-        grabberMotor.set(0.5); 
-        System.out.println("WORK");
-    }
+//    // var range = grabberMotorRange.getDistance().getValueAsDouble();
+//     //if((range < BALL_DETECTION_DISTANCE && 
+//     if(grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING){
+//         grabberMotor.set(-0.1);
+//         SmartDashboard.putBoolean("Ball Detected", true);
+//         System.out.println("ball detect");
+//    // } else if (range > BALL_DETECTION_DISTANCE) {
+//         //SmartDashboard.putBoolean("Ball Detected", false);
+//         //grabberMotor.set(0.1);
+//     }
+//     else{
+//         grabberMotor.set(0.5); 
+//         System.out.println("WORK");
+//     }
     
-}
+// }
 public void runIntakeOuttake(){
- //var range = grabberMotorRange.getDistance().getValueAsDouble();
-   // if((range < BALL_DETECTION_DISTANCE && 
-    if(grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING){
+ var range = grabberMotorRange.getDistance().getValueAsDouble(); 
+    if(range < BALL_DETECTION_DISTANCE &&grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING){
         grabberMotor.set(OUTTAKE_SPEED);
     } else{
         grabberMotor.set(INTAKE_SPEED);
