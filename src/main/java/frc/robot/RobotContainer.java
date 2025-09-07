@@ -1,96 +1,156 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
-import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
+// import com.frc.robot.Constants.OperatorConstants;
+// import com.team6560.frc2025.subsystems.swervedrive.SwerveSubsystem;
+// import com.team6560.frc2025.utility.Enums.PickupLocations;
+// import com.team6560.frc2025.subsystems.LocationManager;
+// import com.team6560.frc2025.autonomous.Auto;
+// import com.team6560.frc2025.autonomous.AutoFactory;
+// import com.team6560.frc2025.autonomous.AutoRoutines;
+
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import java.io.File;
 import swervelib.SwerveInputStream;
 
-private final SendableChooser<Command> autoChooser;
+import java.io.File;
+import java.util.Set;
 
-  SwerveInputStream driveAngularVelocity = SwerveInputStream.of(
-    drivebase.getSwerveDrive(),
-      () -> (Math.pow(driverXbox.getLeftY(), 2)
-            * Math.copySign(1, driverXbox.getLeftY())) 
-            * -0.9 * ((firstXbox.getLeftTriggerAxis() > 0.25) || (secondXbox.getLeftBumperButton() || elevator.getElevatorHeight() > ElevatorConstants.ElevatorStates.STOW + 1) ? 0.6 : 1),
-      () -> (Math.pow(driverXbox.getLeftX(), 2)
-            * Math.copySign(1, driverXbox.getLeftX())) 
-            * -0.9 * ((firstXbox.getLeftTriggerAxis() > 0.25) || (secondXbox.getLeftBumperButton() || elevator.getElevatorHeight() > ElevatorConstants.ElevatorStates.STOW + 1) ? 0.6 : 1))
-    .withControllerRotationAxis(() -> 
-    driverXbox.getRightX() * driverXbox.getRightX() * Math.copySign(1, driverXbox.getRightX()))
-    .deadband(OperatorConstants.DEADBAND)
-    .scaleTranslation(0.8)
-    .allianceRelativeControl(true);; 
+// took out subsystems + added camera
+public class RobotContainer {
+
+  final CommandXboxController driverXbox = new CommandXboxController(0);
+  final XboxController firstXbox = new XboxController(0);
+
+  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve/falcon"));
+
+  // private final Climb climb;
+  // private final ClimbCommand climbCommand;
+  // private final PipeGrabber pipeGrabber;
+  // private final PipeGrabberCommand pipeGrabberCommand;
+  // private final BallGrabber ballGrabber;
+  // private final BallGrabberCommand ballGrabberCommand;
+  // private final Wrist wrist;
+  // private final Elevator elevator = new Elevator();
 
 
-public class RobotContainer
-{
-  public RobotContainer()
-  {
-    // Configure the trigger bindings
-    private void configureBindings() { 
+  // private final SendableChooser<Auto> autoChooser;
+  // private final AutoFactory factory;
 
+  // SwerveInputStream driveAngularVelocity = SwerveInputStream.of(
+  //   drivebase.getSwerveDrive(),
+  //     () -> (Math.pow(driverXbox.getLeftY(), 2)
+  //           * Math.copySign(1, driverXbox.getLeftY())) 
+  //           * -0.9 * ((firstXbox.getLeftTriggerAxis() > 0.25) || (secondXbox.getLeftBumperButton() || elevator.getElevatorHeight() > ElevatorConstants.ElevatorStates.STOW + 1) ? 0.6 : 1),
+  //     () -> (Math.pow(driverXbox.getLeftX(), 2)
+  //           * Math.copySign(1, driverXbox.getLeftX())) 
+  //           * -0.9 * ((firstXbox.getLeftTriggerAxis() > 0.25) || (secondXbox.getLeftBumperButton() || elevator.getElevatorHeight() > ElevatorConstants.ElevatorStates.STOW + 1) ? 0.6 : 1))
+  //   .withControllerRotationAxis(() -> 
+  //   driverXbox.getRightX() * driverXbox.getRightX() * Math.copySign(1, driverXbox.getRightX()))
+  //   .deadband(OperatorConstants.DEADBAND)
+  //   .scaleTranslation(0.8)
+  //   .allianceRelativeControl(true);; 
+
+  public RobotContainer() {
+    // climb = new Climb(controls);
+    // climbCommand = new ClimbCommand(climb, controls);
+    // climb.setDefaultCommand(climbCommand);
+    
+    // ballGrabber = new BallGrabber();
+    // ballGrabberCommand = new BallGrabberCommand(ballGrabber, controls);
+    // ballGrabber.setDefaultCommand(ballGrabberCommand);
+
+    // pipeGrabber = new PipeGrabber();
+    // pipeGrabberCommand = new PipeGrabberCommand(pipeGrabber, controls);
+    // pipeGrabber.setDefaultCommand(pipeGrabberCommand);
+
+    // wrist = new Wrist();
+    // wrist.setDefaultCommand(new WristCommand(wrist, controls));
+    // elevator.setDefaultCommand(new ElevatorCommand(elevator, controls));
+
+    // configureBindings();
+
+    // factory = new AutoFactory(
+    //   null,
+    //   wrist,
+    //   elevator,
+    //   drivebase,
+    //   pipeGrabber
+    // );
+
+    // autoChooser = new SendableChooser<Auto>();
+
+    // for(AutoRoutines auto : AutoRoutines.values()) {
+    //   Auto autonomousRoutine = new Auto(auto, factory);
+    //   if(auto == AutoRoutines.TEST){
+    //     autoChooser.setDefaultOption(autonomousRoutine.getName(), autonomousRoutine);
+    //   }
+    //   else {
+    //     autoChooser.addOption(autonomousRoutine.getName(), autonomousRoutine);
+    //   }
+    // }
+
+    // SmartDashboard.putData("Auto Chooser", autoChooser);
+  }
+
+  private void configureBindings() { 
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
 
-    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    // Trigger for auto align
+    // Trigger autoAlignTrigger = new Trigger(
+    //   () -> (locationManager.hasTarget() && locationManager.isGoSwitchPressed())
+    // );
 
-    driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroNoAprilTagsGyro)));
-
-   // driverXbox.b().onTrue((Commands.runOnce(drivebase::resetOdometryToLimelight)));
-
-    // driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-    // driverXbox.b().whileTrue(drivebase.driveToPose(new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
-    
-    //  driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-
-    // use auto align mechanism
-    }
-
-    
-  private void configureBindings()
-  {
-    Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+    // autoAlignTrigger.onTrue(Commands.defer(() -> new ScoreCommand(wrist, elevator, pipeGrabber, drivebase,
+    //                                                                     locationManager.getReefSide(), 
+    //                                                                     locationManager.getCurrentReefIndex(), 
+    //                                                                     locationManager.getCurrentReefLevel(), 
+    //                                                                     false), 
+    //                                                                     Set.of(wrist, elevator, pipeGrabber, drivebase))
+    //                                                                     .finallyDo((interrupted) -> locationManager.reset()));
 
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-
-    driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroNoAprilTagsGyro)));
+    // driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroNoAprilTagsGyro)));
+    // driverXbox.a().onTrue((Commands.runOnce(drivebase::resetOdometryToLimelight)));
+   // driverXbox.b().onTrue(Commands.runOnce(() -> new IntakeCommand(wrist, elevator, drivebase, PickupLocations.RIGHT).schedule(), drivebase));
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand()
-  {
-    // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
-  }
+  // public void elevL4BeginTele() { // values for auto (don't touch!)
+  //   elevator.setElevatorPosition(17.65);
+  //   wrist.setMotorPosition(40.0);
+  //}
 
-  public void setMotorBrake(boolean brake)
-  {
-    drivebase.setMotorBrake(brake);
+  // public void resetLLBeforeAuto() {
+  //   drivebase.resetOdometryToLimelight();
+  // }
+
+
+  // public Auto getAutonomousCommand() {
+  //   return autoChooser.getSelected();
+  // }
+  
+  // don't randomly brake/unbrake chassis
+  public void setMotorBrake(boolean brake) {
+    // drivebase.setMotorBrake(brake);
   }
-}
-public void resetHeading() {
+  public void resetHeading() {
     // TODO Auto-generated method stub
     this.drivebase.zeroGyro();
   }
+
+  /** Subsystem getters */
+  public SwerveSubsystem getDrivebase() {
+    return drivebase;
+  }
+
+  // public Climb getClimb() {
+  //   return climb;
+  // }
+
 }

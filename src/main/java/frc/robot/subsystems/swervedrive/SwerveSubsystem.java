@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package com.team6560.frc2025.subsystems.swervedrive;
+package frc.robot.subsystems.swervedrive;
 
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Rotation;
@@ -18,9 +18,6 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
-import com.team6560.frc2025.Constants;
-import com.team6560.frc2025.utility.LimelightHelpers;
-import com.team6560.frc2025.utility.LimelightHelpers.PoseEstimate;
 
 import edu.wpi.first.math.VecBuilder;
 // import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -47,6 +44,16 @@ import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.Constants;
+import swervelib.SwerveController;
+import swervelib.SwerveDrive;
+import swervelib.SwerveDriveTest;
+import swervelib.math.SwerveMath;
+import swervelib.parser.SwerveControllerConfiguration;
+import swervelib.parser.SwerveDriveConfiguration;
+import swervelib.parser.SwerveParser;
+import swervelib.telemetry.SwerveDriveTelemetry;
+import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,15 +64,15 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
-import com.frc3481.swervelib.SwerveController;
-import com.frc3481.swervelib.SwerveDrive;
-import com.frc3481.swervelib.SwerveDriveTest;
-import com.frc3481.swervelib.math.SwerveMath;
-import com.frc3481.swervelib.parser.SwerveControllerConfiguration;
-import com.frc3481.swervelib.parser.SwerveDriveConfiguration;
-import com.frc3481.swervelib.parser.SwerveParser;
-import com.frc3481.swervelib.telemetry.SwerveDriveTelemetry;
-import com.frc3481.swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+// import com.robot.swervelib.SwerveController;
+// import com.frc3481.swervelib.SwerveDrive;
+// import com.frc3481.swervelib.SwerveDriveTest;
+// import com.frc3481.swervelib.math.SwerveMath;
+// import com.frc3481.swervelib.parser.SwerveControllerConfiguration;
+// import com.frc3481.swervelib.parser.SwerveDriveConfiguration;
+// import com.frc3481.swervelib.parser.SwerveParser;
+// import com.frc3481.swervelib.telemetry.SwerveDriveTelemetry;
+// import com.frc3481.swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 import java.util.Set;
@@ -113,44 +120,44 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.setModuleEncoderAutoSynchronize(false,1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
 //    swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
     setMotorBrake(true);
-    setupPathPlanner();
+  //   setupPathPlanner();
 
-    // Shuffleboard.getTab("Field").add(aprilTagField);
+  //   // Shuffleboard.getTab("Field").add(aprilTagField);
 
-    // for (int i = 0; i < targetPose2ds.size(); i++) {
-    //   aprilTagField.getObject("TargetPosition+" + i).setPose(targetPose2ds.get(i));
-    // }
+  //   // for (int i = 0; i < targetPose2ds.size(); i++) {
+  //   //   aprilTagField.getObject("TargetPosition+" + i).setPose(targetPose2ds.get(i));
+  //   // }
 
 
-    swerveDrive.setVisionMeasurementStdDevs(visionStdDevs);
+  //   swerveDrive.setVisionMeasurementStdDevs(visionStdDevs);
 
-    // NOTE: These positions have basically zero offset
-    targetPose2dsLeft.add(new Pose2d(new Translation2d(12.858,	5.303), Rotation2d.fromDegrees(120)));
-    targetPose2dsRight.add(new Pose2d(new Translation2d(12.589,	5.124), Rotation2d.fromDegrees(120)));
-    targetPose2dsLeft.add(new Pose2d(new Translation2d(14.082,	4.865), Rotation2d.fromDegrees(60)));
-    targetPose2dsRight.add(new Pose2d(new Translation2d(13.807,	5.031), Rotation2d.fromDegrees(60)));
-    targetPose2dsLeft.add(new Pose2d(new Translation2d(14.3,	3.549), Rotation2d.fromDegrees(0)));
-    targetPose2dsRight.add(new Pose2d(new Translation2d(14.3,	3.892), Rotation2d.fromDegrees(0)));
-    targetPose2dsLeft.add(new Pose2d(new Translation2d(13.266,	2.741), Rotation2d.fromDegrees(300)));
-    targetPose2dsRight.add(new Pose2d(new Translation2d(13.553,	2.903), Rotation2d.fromDegrees(300)));
-    targetPose2dsLeft.add(new Pose2d(new Translation2d(12.064,	3.204), Rotation2d.fromDegrees(240)));
-    targetPose2dsRight.add(new Pose2d(new Translation2d(12.337,	3.029), Rotation2d.fromDegrees(240)));
-    targetPose2dsLeft.add(new Pose2d(new Translation2d(11.850,	4.478), Rotation2d.fromDegrees(180)));
-    targetPose2dsRight.add(new Pose2d(new Translation2d(11.816,	4.143), Rotation2d.fromDegrees(180)));
+  //   // NOTE: These positions have basically zero offset
+  //   targetPose2dsLeft.add(new Pose2d(new Translation2d(12.858,	5.303), Rotation2d.fromDegrees(120)));
+  //   targetPose2dsRight.add(new Pose2d(new Translation2d(12.589,	5.124), Rotation2d.fromDegrees(120)));
+  //   targetPose2dsLeft.add(new Pose2d(new Translation2d(14.082,	4.865), Rotation2d.fromDegrees(60)));
+  //   targetPose2dsRight.add(new Pose2d(new Translation2d(13.807,	5.031), Rotation2d.fromDegrees(60)));
+  //   targetPose2dsLeft.add(new Pose2d(new Translation2d(14.3,	3.549), Rotation2d.fromDegrees(0)));
+  //   targetPose2dsRight.add(new Pose2d(new Translation2d(14.3,	3.892), Rotation2d.fromDegrees(0)));
+  //   targetPose2dsLeft.add(new Pose2d(new Translation2d(13.266,	2.741), Rotation2d.fromDegrees(300)));
+  //   targetPose2dsRight.add(new Pose2d(new Translation2d(13.553,	2.903), Rotation2d.fromDegrees(300)));
+  //   targetPose2dsLeft.add(new Pose2d(new Translation2d(12.064,	3.204), Rotation2d.fromDegrees(240)));
+  //   targetPose2dsRight.add(new Pose2d(new Translation2d(12.337,	3.029), Rotation2d.fromDegrees(240)));
+  //   targetPose2dsLeft.add(new Pose2d(new Translation2d(11.850,	4.478), Rotation2d.fromDegrees(180)));
+  //   targetPose2dsRight.add(new Pose2d(new Translation2d(11.816,	4.143), Rotation2d.fromDegrees(180)));
 
-    targetPose2dsLeft.add(new Pose2d(new Translation2d(12.887 - 8.577,	5.329), Rotation2d.fromDegrees(120)));
-    targetPose2dsRight.add(new Pose2d(new Translation2d(12.589 - 8.577,	5.124), Rotation2d.fromDegrees(120)));
-    targetPose2dsLeft.add(new Pose2d(new Translation2d(14.082 - 8.577,	4.865), Rotation2d.fromDegrees(60)));
-    targetPose2dsRight.add(new Pose2d(new Translation2d(13.807 - 8.577,	5.031), Rotation2d.fromDegrees(60)));
-    targetPose2dsLeft.add(new Pose2d(new Translation2d(14.3 - 8.577,	3.549), Rotation2d.fromDegrees(0)));
-    targetPose2dsRight.add(new Pose2d(new Translation2d(14.3 - 8.577,	3.892), Rotation2d.fromDegrees(0)));
-    targetPose2dsLeft.add(new Pose2d(new Translation2d(13.266 - 8.577,	2.741), Rotation2d.fromDegrees(300)));
-    targetPose2dsRight.add(new Pose2d(new Translation2d(13.553 - 8.577,	2.903), Rotation2d.fromDegrees(300)));
-    targetPose2dsLeft.add(new Pose2d(new Translation2d(12.064 - 8.577,	3.204), Rotation2d.fromDegrees(240)));
-    targetPose2dsRight.add(new Pose2d(new Translation2d(12.337 - 8.577,	3.029), Rotation2d.fromDegrees(240)));
-    targetPose2dsLeft.add(new Pose2d(new Translation2d(11.850 - 8.577,	4.478), Rotation2d.fromDegrees(180)));
-    targetPose2dsRight.add(new Pose2d(new Translation2d(11.816 - 8.577,	4.143), Rotation2d.fromDegrees(180)));
-  }
+  //   targetPose2dsLeft.add(new Pose2d(new Translation2d(12.887 - 8.577,	5.329), Rotation2d.fromDegrees(120)));
+  //   targetPose2dsRight.add(new Pose2d(new Translation2d(12.589 - 8.577,	5.124), Rotation2d.fromDegrees(120)));
+  //   targetPose2dsLeft.add(new Pose2d(new Translation2d(14.082 - 8.577,	4.865), Rotation2d.fromDegrees(60)));
+  //   targetPose2dsRight.add(new Pose2d(new Translation2d(13.807 - 8.577,	5.031), Rotation2d.fromDegrees(60)));
+  //   targetPose2dsLeft.add(new Pose2d(new Translation2d(14.3 - 8.577,	3.549), Rotation2d.fromDegrees(0)));
+  //   targetPose2dsRight.add(new Pose2d(new Translation2d(14.3 - 8.577,	3.892), Rotation2d.fromDegrees(0)));
+  //   targetPose2dsLeft.add(new Pose2d(new Translation2d(13.266 - 8.577,	2.741), Rotation2d.fromDegrees(300)));
+  //   targetPose2dsRight.add(new Pose2d(new Translation2d(13.553 - 8.577,	2.903), Rotation2d.fromDegrees(300)));
+  //   targetPose2dsLeft.add(new Pose2d(new Translation2d(12.064 - 8.577,	3.204), Rotation2d.fromDegrees(240)));
+  //   targetPose2dsRight.add(new Pose2d(new Translation2d(12.337 - 8.577,	3.029), Rotation2d.fromDegrees(240)));
+  //   targetPose2dsLeft.add(new Pose2d(new Translation2d(11.850 - 8.577,	4.478), Rotation2d.fromDegrees(180)));
+  //   targetPose2dsRight.add(new Pose2d(new Translation2d(11.816 - 8.577,	4.143), Rotation2d.fromDegrees(180)));
+  // }
 
   /**
    * Construct the swerve drive.
@@ -175,7 +182,7 @@ public class SwerveSubsystem extends SubsystemBase
   // }
 
 
-  private Pose2d emptyPose = new Pose2d();
+  //private Pose2d emptyPose = new Pose2d();
 
   @Override
   public void periodic()
@@ -204,13 +211,13 @@ public class SwerveSubsystem extends SubsystemBase
     // // }
   }
 
-  Pose2d getClosestTargetPoseLeft() {
-    return getPose().nearest(targetPose2dsLeft);
-  }
+  // Pose2d getClosestTargetPoseLeft() {
+  //   return getPose().nearest(targetPose2dsLeft);
+  // }
 
-  Pose2d getClosestTargetPoseRight() {
-    return getPose().nearest(targetPose2dsRight);
-  }
+  // Pose2d getClosestTargetPoseRight() {
+  //   return getPose().nearest(targetPose2dsRight);
+  // }
 
   @Override
   public void simulationPeriodic()
@@ -220,8 +227,8 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Setup AutoBuilder for PathPlanner.
    */
-  public void setupPathPlanner()
-  {
+  // public void setupPathPlanner()
+  // {
     // Load the RobotConfig from the GUI settings. You should probably
     // store this in your Constants file
     RobotConfig config;
@@ -299,22 +306,22 @@ public class SwerveSubsystem extends SubsystemBase
    * @param pathName PathPlanner path name.
    * @return {@link AutoBuilder#followPath(PathPlannerPath)} path command.
    */
-  public Command getAutonomousCommand(String pathName)
-  {
-    // Create a path following command using AutoBuilder. This will also trigger event markers.
-    return new PathPlannerAuto(pathName);
-  }
+  // public Command getAutonomousCommand(String pathName)
+  // {
+  //   // Create a path following command using AutoBuilder. This will also trigger event markers.
+  //   return new PathPlannerAuto(pathName);
+  // }
 
 
 
 
-  public Command driveToNearestPoseLeft() {
-    return driveToPose(getClosestTargetPoseLeft());
-  }
+  // public Command driveToNearestPoseLeft() {
+  //   return driveToPose(getClosestTargetPoseLeft());
+  // }
 
-  public Command driveToNearestPoseRight(){
-    return driveToPose(getClosestTargetPoseRight());
-  }
+  // public Command driveToNearestPoseRight(){
+  //   return driveToPose(getClosestTargetPoseRight());
+  // }
 
   /**
    * Drive with {@link SwerveSetpointGenerator} from 254, implemented by PathPlanner.
@@ -563,11 +570,11 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.resetOdometry(initialHolonomicPose);
   }
 
-  public void resetOdometryToLimelight() {
-    PoseEstimate poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
-    if (poseEstimate == null) return;
+  // public void resetOdometryToLimelight() {
+  //   PoseEstimate poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
+  //   if (poseEstimate == null) return;
     
-    Pose2d pose = poseEstimate.pose;
+   // Pose2d pose = poseEstimate.pose;
 
     if (pose == null || pose.equals(emptyPose)) return;
 
@@ -579,10 +586,10 @@ public class SwerveSubsystem extends SubsystemBase
    *
    * @return The robot's pose
    */
-  public Pose2d getPose()
-  {
-    return swerveDrive.getPose();
-  }
+  // public Pose2d getPose()
+  // {
+  //   return swerveDrive.getPose();
+  // }
 
   /**
    * Set chassis speeds with closed-loop velocity control.
@@ -612,10 +619,10 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.zeroGyro();
   }
 
-  public void zeroNoAprilTagsGyro()
-  {
-    swerveDrive.zeroNoAprilTagsGyro();
-  }
+  // public void zeroNoAprilTagsGyro()
+  // {
+  //   swerveDrive.zeroNoAprilTagsGyro();
+  // }
 
   /**
    * Checks if the alliance is red, defaults to false if alliance isn't available.
@@ -639,12 +646,12 @@ public class SwerveSubsystem extends SubsystemBase
     {
       zeroGyro();
       //Set the pose 180 degrees
-      resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
-    } else
-    {
-      zeroGyro();
-    }
-  }
+  //     resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+  //   } else
+  //   {
+  //     zeroGyro();
+  //   }
+  // }
 
   /**
    * Sets the drive motors to brake/coast mode.
@@ -664,8 +671,8 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public Rotation2d getHeading()
   {
-    return getPose().getRotation();
-  }
+  //   return getPose().getRotation();
+  // }
 
   /**
    * Get the chassis speeds based on controller input of 2 joysticks. One for speeds in which direction. The other for
