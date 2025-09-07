@@ -29,16 +29,16 @@ public class ArmCommand extends Command {
         if (keyboardControls.goToStow()) {
             System.out.println("STOW button pressed!");
             target_state = Arm.State.STOW;
-        } else if (keyboardControls.goToPickup()) { // Fixed: lowercase 'g'
+        } else if (keyboardControls.goToPickup()) { 
             System.out.println("PICKUP button pressed!");
             target_state = Arm.State.PICKUP;
-        } else if (keyboardControls.goToReef()) { // Fixed: lowercase 'g'
+        } else if (keyboardControls.goToReef()) { 
             System.out.println("REEF button pressed!");
             target_state = Arm.State.REEF;
-        } else if (keyboardControls.goToGround()) { // Fixed: lowercase 'g'
+        } else if (keyboardControls.goToGround()) { 
             System.out.println("GROUND button pressed!");
             target_state = Arm.State.GROUND;
-        } else if (keyboardControls.goToProcessor()) { // Fixed: lowercase 'g'
+        } else if (keyboardControls.goToProcessor()) { 
             System.out.println("PROCESSOR button pressed!");
             target_state = Arm.State.PROCESSOR;
         }

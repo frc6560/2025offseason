@@ -11,8 +11,8 @@
       "style": "0",
       "userScale": "2",
       "width": "1280",
-      "xpos": "218",
-      "ypos": "288"
+      "xpos": "43",
+      "ypos": "224"
     }
   },
   "Window": {
@@ -23,7 +23,7 @@
     },
     "###/SmartDashboard/Field": {
       "Collapsed": "0",
-      "Pos": "166,24",
+      "Pos": "377,-46",
       "Size": "740,373"
     },
     "###FMS": {
@@ -43,7 +43,7 @@
     },
     "###NetworkTables": {
       "Collapsed": "0",
-      "Pos": "582,299",
+      "Pos": "560,146",
       "Size": "750,236"
     },
     "###NetworkTables Info": {
@@ -58,7 +58,7 @@
     },
     "###System Joysticks": {
       "Collapsed": "0",
-      "Pos": "205,308",
+      "Pos": "205,291",
       "Size": "192,218"
     },
     "###Timing": {

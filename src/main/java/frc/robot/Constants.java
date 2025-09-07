@@ -61,7 +61,7 @@ public final class Constants
     public static final double kD = 0.1;
 
     /** Motion Constraints */
-    public static final double kMaxV = 2.0; // m/s
+    public static final double kMaxV = 4.0; // m/s
     public static final double kMaxA = 5.0; // m/s^2
 
     /** Arm PID Gains */
@@ -75,7 +75,7 @@ public final class Constants
 
     /** Arm Geometry */
     public static final double MOTOR_GEAR_RATIO = 108.0; // Motor reduction ratio
-    public static final double ENCODER_GEAR_RATIO = 4.0; // Encoder reduction ratio
+    public static final double ENCODER_GEAR_RATIO = 81.0; // Encoder reduction ratio
     public static final double ARM_LENGTH_METERS = 0.5; // TODO: measure (m)
     public static final double ARM_MASS_KG = 5.0;       // TODO: measure (kg)
     public static final double MAX_ANGLE_DEG = 121.0;
@@ -84,11 +84,18 @@ public final class Constants
     public static final double GRAVITY = 9.81; // m/s^2
 
     /** Arm Setpoints (Degrees) */
-    public static final double STOW_POSITION_DEG = 0.0;
-    public static final double PICKUP_POSITION_DEG = 121.0;
-    public static final double REEF_POSITION_DEG = 11.0;
-    public static final double GROUND_PICKUP_DEG = -31.0;
-    public static final double PROCESSOR_DEG = 0.0;
+    public static final double STOW_POSITION_DEG = 0.0+90.0;
+    public static final double PICKUP_POSITION_DEG = -121.0+90.0;
+    public static final double REEF_POSITION_DEG = -11+90.0; //11.0+90.0;
+    public static final double GROUND_PICKUP_DEG = 0.0+90.0; //31.0+90.0;
+    public static final double PROCESSOR_DEG = 0.0+90.0;
+    
+
+    // Absolute encoder setup
+  public static final int ABS_ENCODER_DIO_PORT = 0;   // change to your wiring
+  public static final double ABS_ENCODER_OFFSET_DEG = 0.0; // tune so stow = 0°
+  public static final boolean ABS_ENCODER_REVERSED = false; 
+
 
     /** Arm Setpoints (Radians) */
     public static final double STOW_POSITION_RAD = Math.toRadians(STOW_POSITION_DEG);

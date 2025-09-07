@@ -125,6 +125,9 @@
       "open": false
     },
     "transitory": {
+      "Arm": {
+        "open": true
+      },
       "FMSInfo": {
         "open": true
       },
