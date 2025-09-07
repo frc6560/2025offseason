@@ -52,15 +52,15 @@ public final class Constants
     public static final int BotLimitSwitchID = 4;
 
     public static final double kS = 1;
-    public static final double kV = 1;
-    public static final double kA = 1;
+    public static final double kV = 2;
+    public static final double kA = 2;
 
     public static final double kP = 0.8;
     public static final double kI = 0.2;
     public static final double kD = 0.1;
 
-    public static final double kMaxV = 2;
-    public static final double kMaxA = 5;
+    public static final double kMaxV = 0.9;
+    public static final double kMaxA = 0.9;
 
     public static final double kG = 0.4;
     

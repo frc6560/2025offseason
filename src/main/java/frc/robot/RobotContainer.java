@@ -17,9 +17,6 @@ public class RobotContainer {
     private final XboxController firstXbox = new XboxController(0);
     private final XboxController secondXbox = new XboxController(1);
 
-    // Keyboard HID (optional, not used for simulation)
-    private final CommandGenericHID keyboard = new CommandGenericHID(2);
-
     // Subsystems
     private final Elevator elevator = new Elevator();
 

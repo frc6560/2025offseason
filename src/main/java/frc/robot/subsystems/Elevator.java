@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
@@ -17,6 +18,8 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.ElevatorConstants;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Elevator extends SubsystemBase {
 
@@ -28,9 +31,12 @@ public class Elevator extends SubsystemBase {
 
     private final ElevatorFeedforward elevatorFeedforward = new ElevatorFeedforward(
             ElevatorConstants.kS, ElevatorConstants.kV, ElevatorConstants.kA);
+    private double targetPos = 0;
 
     public final TrapezoidProfile.Constraints elevConstraints =
             new TrapezoidProfile.Constraints(ElevatorConstants.kMaxV, ElevatorConstants.kMaxA);
+
+    public final TrapezoidProfile elevTrapezoidProfile = new TrapezoidProfile(elevConstraints);
 
     public TrapezoidProfile.State elevGoalState = new TrapezoidProfile.State();
     public TrapezoidProfile.State elevSetpointState = new TrapezoidProfile.State();
@@ -47,7 +53,6 @@ public class Elevator extends SubsystemBase {
         L3Ball,
         ShootBall,
         Idle,
-        GroundBall,
     }
 
     private WantedState wantedState = WantedState.Idle;
@@ -60,6 +65,7 @@ public class Elevator extends SubsystemBase {
 
     // Shuffleboard tab for numeric + boolean properties
     private final ShuffleboardTab tab = Shuffleboard.getTab("Elevator");
+    double startTime = 0;
 
     public Elevator() {
         // Keep mechanism in SmartDashboard
@@ -76,28 +82,46 @@ public class Elevator extends SubsystemBase {
 
         ElevLeft.getConfigurator().apply(config.withSlot0(elevatorPID));
         ElevRight.getConfigurator().apply(config.withSlot0(elevatorPID));
-
-        elevSetpointState = new TrapezoidProfile.State(getElevatorHeight(), 0);
-
+        
         // Register this subsystem in Shuffleboard for AdvantageScope to see Sendable properties
         tab.add(this);
+        
+        if (RobotBase.isSimulation()) {
+            startTime = Timer.getFPGATimestamp();
+        }
     }
 
     @Override
     public void periodic() {
-        double elevatorHeight = getElevatorHeight();
+        if (RobotBase.isSimulation()) {
 
-        // Step trapezoid profile
-        elevSetpointState = new TrapezoidProfile(elevConstraints)
-                .calculate(0.02, elevSetpointState, elevGoalState);
+            double elevatorHeight = getElevatorHeight();
 
-        // Visualization
-        elevatorLift.setLength(elevatorHeight);
-        elevatorLift.setAngle(90);
+            // Visualization
+            double currentTime = Timer.getFPGATimestamp();
+            double elapsedTime = currentTime - startTime;
 
-        SmartDashboard.putData("ElevatorMechanism", mechanism);
+            if (elapsedTime >= 3) {
+                setGoal(ElevatorConstants.ElevState.SHOOTBALL.getValue());
+            }
 
-        System.out.println(elevatorHeight);
+            if (elapsedTime >= 12) {
+                setGoal(ElevatorConstants.ElevState.L2BALL.getValue());
+            }
+
+            if (elapsedTime >= 18) {
+                setGoal(ElevatorConstants.ElevState.L3BALL.getValue());
+                startTime = Timer.getFPGATimestamp();
+            }
+
+            SmartDashboard.putData("ElevatorMechanism", mechanism);
+            
+            setControl();
+
+            
+            
+
+        }
     }
 
     @Override
@@ -114,7 +138,6 @@ public class Elevator extends SubsystemBase {
         builder.addBooleanProperty("GoToL2Ball", () -> false, val -> setWantedState(WantedState.L2Ball));
         builder.addBooleanProperty("GoToL3Ball", () -> false, val -> setWantedState(WantedState.L3Ball));
         builder.addBooleanProperty("GoToShootBall", () -> false, val -> setWantedState(WantedState.ShootBall));
-        builder.addBooleanProperty("GoToGroundBall", () -> false, val -> setWantedState(WantedState.GroundBall));
     }
 
     // Motor getters
@@ -122,10 +145,17 @@ public class Elevator extends SubsystemBase {
     public TalonFX getElevRight() { return ElevRight; }
 
     // Goal/setpoint setters
+    
     public void setSetpoint(TrapezoidProfile.State nextSetpoint) { elevSetpointState = nextSetpoint; }
+    
     public TrapezoidProfile.State getSetpoint() { return elevSetpointState; }
-    public void setGoal(double goalState) { elevGoalState = new TrapezoidProfile.State(goalState, 0); }
+    
+    public void setGoal(double goalState) { 
+        elevGoalState = new TrapezoidProfile.State(goalState, 0); 
+    }
+    
     public TrapezoidProfile.State getGoal() { return elevGoalState; }
+    
     public double getGoalValue() { return elevGoalState.position; }
 
     // Stop motors
@@ -134,13 +164,33 @@ public class Elevator extends SubsystemBase {
         ElevRight.stopMotor();
     }
 
+    public TrapezoidProfile.Constraints getConstraints() {
+        return elevConstraints;
+    }
+
     // Limit switches
     public boolean getLimitSwitchTop() { return topLimitSwitch.get(); }
     public boolean getLimitSwitchBot() { return botLimitSwitch.get(); }
+    
 
-    // Elevator height in rotations
-    public double getElevatorHeight() { return ElevLeft.getPosition().getValueAsDouble(); }
+    public double getElevatorHeight() {
+        return ElevLeft.getPosition().getValueAsDouble();
+    }
 
-    // WantedState setter
-    public void setWantedState(WantedState state) { wantedState = state; }
+    public void setWantedState(WantedState wantedState) {
+        this.wantedState = wantedState;
+    }
+
+    public void setControl() {
+        final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
+        TrapezoidProfile.State targetState = elevTrapezoidProfile.calculate(0.02, elevSetpointState, elevGoalState);
+        m_request.Position = targetState.position;
+        m_request.Velocity = targetState.velocity;
+        setSetpoint(targetState);
+        ElevLeft.setControl(m_request);
+        ElevRight.setControl(m_request);
+        elevatorLift.setLength(m_request.Position);
+        System.out.println(m_request.Position);
+        elevatorLift.setAngle(90);
+    }
 }
