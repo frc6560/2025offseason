@@ -37,9 +37,9 @@ public class ManualControls {
 
     // slow down
 
-    public boolean slowDown() {
-      return (firstXbox.getLeftTriggerAxis() > 0.25);
-    }
+    // public boolean slowDown() {
+    //   return (firstXbox.getLeftTriggerAxis() > 0.25);
+    // }
 
     // climb
 
@@ -98,6 +98,8 @@ public class ManualControls {
     public boolean goToPlacePos() {
       return secondXbox.getLeftBumperButton();
     }
+
+
 
     // tests 
 

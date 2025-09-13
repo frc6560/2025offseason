@@ -20,12 +20,11 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.DrivebaseConstants;
 //import frc.robot.Constants.FourBarConstants
 import frc.robot.Constants.OperatorConstants;
-//import frc.robot.Constants.GrabberConstants;
 
 import frc.robot.subsystems.swervedrive.*;
 import frc.robot.subsystems.Elevator;
 //import frc.robot.subsystems.FourBar;
-//import frc.robot.subsystems.Grabber; 
+import frc.robot.subsystems.BallGrabber; 
 
 
 import java.util.Optional;
@@ -36,7 +35,7 @@ public class SubsystemManager extends SubsystemBase {
     private final SwerveSubsystem swerveSubsystem;
     private final Elevator elevator;
     //private final FourBar fourbar;
-    //private final Grabber grabber;
+    private final BallGrabber ballGrabber;
 
     private final CommandXboxController controller = new CommandXboxController(0);
     
@@ -72,16 +71,17 @@ public class SubsystemManager extends SubsystemBase {
     private CurrentSuperState currentSuperState = CurrentSuperState.Stow;
     private CurrentSuperState previousSuperState;
 
+
     public SubsystemManager(
         SwerveSubsystem swerve,
-        Elevator elevator//,
+        Elevator elevator,
         //FourBar fourbar;
-        //Grabber grabber;
+        BallGrabber ballGrabber
         ) {
         this.swerveSubsystem = swerve;
         this.elevator = elevator;
         //this.fourbar = fourbar;
-        //this.grabber = grabber;
+        this.ballGrabber = ballGrabber;
     }
 
     public void periodic() {
@@ -203,29 +203,27 @@ public class SubsystemManager extends SubsystemBase {
     }
 
     private void stationIntake() {
-/* */
+
     }
 
     private void groundCoralIntake() {
-/* */
+
     }
 
     private void groundBallIntake() {
-/*
-        if (grabber.hasAlgae()) {
-            elevator.setWantedState(Elevator.WantedState.Stow);
-            elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
-            fourbar.setWantedState(FourBar.WantedState.MoveToPosition);
-            fourbar.setGoal(FourBarConstants.FourBarState.STOW.getValue());
+
+        if (ballGrabber.hasBall()) {
+            // fourbar.setWantedState(FourBar.WantedState.MoveToPosition);
+            // fourbar.setGoal(FourBarConstants.FourBarState.STOW.getValue());
             
-        } else {
-            elevator.setWantedState(Elevator.WantedState.GroundBall);
-            elevator.setGoal(ElevatorConstants.ElevState.GROUNDBALL.getValue());
-            fourbar.setWantedState(FourBar.WantedState.MoveToPosition);
-            fourbar.setGoal(FourBarConstants.FourBarState.GROUNDPICKUP.getValue());
+        } else { 
+            // fourbar.setWantedState(FourBar.WantedState.MoveToPosition);
+            // fourbar.setGoal(FourBarConstants.FourBarState.GROUNDPICKUP.getValue());
         }
-        grabber.setWantedState(Grabber.WantedState.Intake);
-*/
+        elevator.setWantedState(Elevator.WantedState.Stow);
+        elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
+        ballGrabber.runIntakeOuttake();
+
     }
 
 }
