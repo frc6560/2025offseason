@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.DrivebaseConstants;
-//import frc.robot.Constants.FourBarConstants
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.subsystems.swervedrive.*;
@@ -34,7 +34,7 @@ import java.util.Optional;
 public class SubsystemManager extends SubsystemBase {
     private final SwerveSubsystem swerveSubsystem;
     private final Elevator elevator;
-    //private final FourBar fourbar;
+    private final Arm arm;
     private final BallGrabber ballGrabber;
 
     private final CommandXboxController controller = new CommandXboxController(0);
@@ -75,12 +75,12 @@ public class SubsystemManager extends SubsystemBase {
     public SubsystemManager(
         SwerveSubsystem swerve,
         Elevator elevator,
-        //FourBar fourbar;
+        Arm arm,
         BallGrabber ballGrabber
         ) {
         this.swerveSubsystem = swerve;
         this.elevator = elevator;
-        //this.fourbar = fourbar;
+        this.arm = arm;
         this.ballGrabber = ballGrabber;
     }
 
@@ -213,12 +213,9 @@ public class SubsystemManager extends SubsystemBase {
     private void groundBallIntake() {
 
         if (ballGrabber.hasBall()) {
-            // fourbar.setWantedState(FourBar.WantedState.MoveToPosition);
-            // fourbar.setGoal(FourBarConstants.FourBarState.STOW.getValue());
-            
-        } else { 
-            // fourbar.setWantedState(FourBar.WantedState.MoveToPosition);
-            // fourbar.setGoal(FourBarConstants.FourBarState.GROUNDPICKUP.getValue());
+            arm.setGoal(ArmConstants.ArmState.STOW.ArmgetValue());
+        } else {
+            arm.setGoal(ArmConstants.ArmState.PICKUP.ArmgetValue());
         }
         elevator.setWantedState(Elevator.WantedState.Stow);
         elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());

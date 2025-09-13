@@ -75,6 +75,7 @@ public final class Constants
         
 
           public final double elevatorSetPoint;
+          
           private ElevState(double elevatorSetpoint) {
             this.elevatorSetPoint = elevatorSetpoint;
           }
@@ -173,6 +174,10 @@ public final class Constants
 
       ArmState(double angleDeg) {
         this.angleDeg = angleDeg;
+      }
+
+      public double ArmgetValue() {
+        return angleDeg;
       }
     }
   }
