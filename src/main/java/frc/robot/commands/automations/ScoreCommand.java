@@ -3,6 +3,7 @@ package frc.robot.commands.automations;
 import frc.robot.util.AutoAlignPath;
 import frc.robot.util.Setpoint;
 import frc.robot.subsystems.swervedrive.*;
+import frc.robot.util.enums.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -51,7 +52,6 @@ public class ScoreCommand extends SequentialCommandGroup {
     // Levels
     ReefSide side;
     ReefIndex location;
-    ReefLevel level;
 
     // Targets
     private double elevatorTarget;
@@ -59,36 +59,33 @@ public class ScoreCommand extends SequentialCommandGroup {
 
 
     /** Constructor for our scoring command */
-    public ScoreCommand(Wrist wrist, Elevator elevator, PipeGrabber grabber, SwerveSubsystem drivetrain, 
-                            ReefSide side, ReefIndex location, ReefLevel level) {
+    public ScoreCommand(SwerveSubsystem drivetrain, 
+                            ReefSide side, ReefIndex location) {
 
         this.drivetrain = drivetrain;
 
         this.side = side;
         this.location = location;
-        this.level = level;
 
         setTargets();
 
         if(DriverStation.isAutonomous()){
-            super.addCommands(new ParallelCommandGroup(getGrabberIntake(), getDriveToPrescore()),
-                                new ParallelCommandGroup(getDriveInCommand(), getActuateCommand()).withTimeout(1.5), 
-                                getScoreCommand());
+            super.addCommands(new ParallelCommandGroup(getDriveToPrescore()),
+                                new ParallelCommandGroup(getDriveInCommand()));
         }
         else{
-            super.addCommands(new ParallelCommandGroup(getDriveInCommand(), getActuateCommand()).withTimeout(3.5), 
-                                getScoreCommand(), getDeactuationCommand());
+            super.addCommands(getDriveInCommand());
         }
-        super.addRequirements(wrist, elevator, grabber, drivetrain);
+        super.addRequirements(drivetrain);
     }
 
     /** Runs a grabber intake during auto, which decreases wait time at the station */
-    public Command getGrabberIntake(){
-        return new RunCommand(
-            () -> grabber.runIntakeMaxSpeed(),
-            grabber).withTimeout(0.4)
-            .andThen(() -> grabber.stop());
-    }
+    // public Command getGrabberIntake(){
+    //     return new RunCommand(
+    //         () -> grabber.runIntakeMaxSpeed(),
+    //         grabber).withTimeout(0.4)
+    //         .andThen(() -> grabber.stop());
+    // }
 
     /** Helper method for following a straight trajectory with a trapezoidal profile */
     public Command getFollowPath(AutoAlignPath path, double finalVelocity){
@@ -116,7 +113,7 @@ public class ScoreCommand extends SequentialCommandGroup {
             () -> {
                 // Move.
                 Setpoint newSetpoint = getNextSetpoint(path);
-                drivetrain.followSegment(newSetpoint, path.endPose);
+                drivetrain.followSegment(newSetpoint);
                 if(drivetrain.getPose().getTranslation().getDistance(path.endPose.getTranslation()) < 0.02
                     && Math.abs(drivetrain.getPose().getRotation().getRadians() - path.endPose.getRotation().getRadians()) < 0.017
                 ){
@@ -137,10 +134,7 @@ public class ScoreCommand extends SequentialCommandGroup {
         path = new AutoAlignPath(
             drivetrain.getPose(),
             getPrescore(targetPose),
-            DrivebaseConstants.kMaxAutoVelocity,
-            DrivebaseConstants.kMaxAutoAcceleration,
-            DrivebaseConstants.kMaxOmega,
-            DrivebaseConstants.kMaxAlpha);
+            1, 1, 1, 1);
         final Command driveToPrescore = getFollowPath(path, 2.1).until(
             () -> drivetrain.getPose().getTranslation().getDistance(getPrescore(targetPose).getTranslation()) < 0.2
         );
@@ -152,69 +146,66 @@ public class ScoreCommand extends SequentialCommandGroup {
         path = new AutoAlignPath(
             drivetrain.getPose(),
             targetPose, //originally just target pose
-            DrivebaseConstants.kMaxAlignmentVelocity,
-            DrivebaseConstants.kMaxAlignmentAcceleration,
-            DrivebaseConstants.kMaxOmega,
-            DrivebaseConstants.kMaxAlpha);
+            1, 1, 1, 1);
         final Command driveIn = getFollowPath(path, 0);
         return driveIn;
     }
 
-    /** Actuates superstructure to our desired level */
-    public Command getActuateCommand(){
-        final Command actuateToPosition = new FunctionalCommand(
-            () -> {
-            },
-            () -> {
-                if(drivetrain.getPose().getTranslation().getDistance(targetPose.getTranslation()) < 0.95){
-                    elevator.setElevatorPosition(elevatorTarget);
-                    wrist.setMotorPosition(wristTarget);
-                }
-            },
-            (interrupted) -> {},
-            () ->  Math.abs(elevator.getElevatorHeight() - elevatorTarget) < ElevatorConstants.kElevatorTolerance
-        );
-        return actuateToPosition;
-    }
+    // /** Actuates superstructure to our desired level */
+    // public Command getActuateCommand(){
+    //     final Command actuateToPosition = new FunctionalCommand(
+    //         () -> {
+    //         },
+    //         () -> {
+    //             if(drivetrain.getPose().getTranslation().getDistance(targetPose.getTranslation()) < 0.95){
+    //                 elevator.setElevatorPosition(elevatorTarget);
+    //                 wrist.setMotorPosition(wristTarget);
+    //             }
+    //         },
+    //         (interrupted) -> {},
+    //         () ->  Math.abs(elevator.getElevatorHeight() - elevatorTarget) < ElevatorConstants.kElevatorTolerance
+    //     );
+    //     return actuateToPosition;
+    // }
 
     /** Scores the piece */
-    public Command getScoreCommand(){
-        final Command dunkAndScore = new FunctionalCommand(
-            () -> {
-            },
-            () -> {
-                grabber.runGrabberOuttake();
-            },
-            (interrupted) -> {
-                grabber.stop();
-            },
-            () -> false
-        );
-        return dunkAndScore.withTimeout(0.25);
-    }
+    // public Command getScoreCommand(){
+    //     final Command dunkAndScore = new FunctionalCommand(
+    //         () -> {
+    //         },
+    //         () -> {
+    //             grabber.runGrabberOuttake();
+    //         },
+    //         (interrupted) -> {
+    //             grabber.stop();
+    //         },
+    //         () -> false
+    //     );
+    //     return dunkAndScore.withTimeout(0.25);
+    // }
 
     /** Deactuates the superstructure in teleop for driver QOL */
-    public Command getDeactuationCommand(){
-        path = new AutoAlignPath(
-            drivetrain.getPose(),
-            getPrescore(targetPose),
-            DrivebaseConstants.kMaxAlignmentVelocity, 
-            DrivebaseConstants.kMaxAlignmentAcceleration,
-            DrivebaseConstants.kMaxOmega,
-            DrivebaseConstants.kMaxAlpha);
-        final Command deactuateSuperstructure = new FunctionalCommand(
-                        () -> {
-                        },
-                        () -> { 
-                            wrist.setMotorPosition(WristConstants.WristStates.STOW);
-                            elevator.setElevatorPosition(ElevatorConstants.ElevatorStates.STOW);
-                        },
-                        (interrupted) -> {},
-                        () -> (Math.abs(elevator.getElevatorHeight() - ElevatorConstants.ElevatorStates.STOW) < ElevatorConstants.kElevatorTolerance) 
-        );
-        // final Command backUp = getFollowPath(path, 0);
-        return Commands.parallel(deactuateSuperstructure).withTimeout(0.5);
-    }
+    // public Command getDeactuationCommand(){
+    //     path = new AutoAlignPath(
+    //         drivetrain.getPose(),
+    //         getPrescore(targetPose),
+    //         DrivebaseConstants.kMaxAlignmentVelocity, 
+    //         DrivebaseConstants.kMaxAlignmentAcceleration,
+    //         DrivebaseConstants.kMaxOmega,
+    //         DrivebaseConstants.kMaxAlpha);
+    //     final Command deactuateSuperstructure = new FunctionalCommand(
+    //                     () -> {
+    //                     },
+    //                     () -> { 
+    //                         wrist.setMotorPosition(WristConstants.WristStates.STOW);
+    //                         elevator.setElevatorPosition(ElevatorConstants.ElevatorStates.STOW);
+    //                     },
+    //                     (interrupted) -> {},
+    //                     () -> (Math.abs(elevator.getElevatorHeight() - ElevatorConstants.ElevatorStates.STOW) < ElevatorConstants.kElevatorTolerance) 
+    //     );
+    //     // final Command backUp = getFollowPath(path, 0);
+    //     return Commands.parallel(deactuateSuperstructure).withTimeout(0.5);
+    // }
 
     /** Gets the prescore for a specific Pose2d */
     public Pose2d getPrescore(Pose2d targetPose){
@@ -258,32 +249,32 @@ public class ScoreCommand extends SequentialCommandGroup {
             targetPose = applyAllianceTransform(targetPose);
         }
 
-        switch (level) {
-            case L1:
-                wristTarget = WristConstants.WristStates.L1;
-                elevatorTarget = ElevatorConstants.ElevatorStates.STOW;
-                break;
+        // switch (level) {
+        //     case L1:
+        //         wristTarget = WristConstants.WristStates.L1;
+        //         elevatorTarget = ElevatorConstants.ElevatorStates.STOW;
+        //         break;
 
-            case L2:
-                wristTarget = WristConstants.WristStates.L2;
-                elevatorTarget = ElevatorConstants.ElevatorStates.L2;
-                break;
+        //     case L2:
+        //         wristTarget = WristConstants.WristStates.L2;
+        //         elevatorTarget = ElevatorConstants.ElevatorStates.L2;
+        //         break;
 
-            case L3:
-                wristTarget = WristConstants.WristStates.L2;
-                elevatorTarget = ElevatorConstants.ElevatorStates.L3;
-                break;
+        //     case L3:
+        //         wristTarget = WristConstants.WristStates.L2;
+        //         elevatorTarget = ElevatorConstants.ElevatorStates.L3;
+        //         break;
 
-            case L4: 
-                wristTarget = WristConstants.WristStates.L4;
-                elevatorTarget = ElevatorConstants.ElevatorStates.L4;
-                break;
+        //     case L4: 
+        //         wristTarget = WristConstants.WristStates.L4;
+        //         elevatorTarget = ElevatorConstants.ElevatorStates.L4;
+        //         break;
 
-            default:
-                wristTarget = WristConstants.WristStates.STOW;
-                elevatorTarget = ElevatorConstants.ElevatorStates.STOW;
-                break;
-        }
+        //     default:
+        //         wristTarget = WristConstants.WristStates.STOW;
+        //         elevatorTarget = ElevatorConstants.ElevatorStates.STOW;
+        //         break;
+        // }
     }
 
     /** Transforms red alliance poses to blue by reflecting around the center point of the field*/
