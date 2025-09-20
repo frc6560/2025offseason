@@ -1,6 +1,7 @@
 package frc.robot.commands.automations;
 
 import frc.robot.util.AutoAlignPath;
+import frc.robot.util.Setpoint;
 import frc.robot.subsystems.swervedrive.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
