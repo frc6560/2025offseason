@@ -1,5 +1,8 @@
 package frc.robot.commands.automations;
 
+import frc.robot.util.AutoAlignPath;
+import frc.robot.subsystems.swervedrive.*;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -43,9 +46,6 @@ public class ScoreCommand extends SequentialCommandGroup {
 
     // Subsystems
     private SwerveSubsystem drivetrain;
-    private Wrist wrist;
-    private Elevator elevator;
-    private PipeGrabber grabber;
 
     // Levels
     ReefSide side;
@@ -62,9 +62,6 @@ public class ScoreCommand extends SequentialCommandGroup {
                             ReefSide side, ReefIndex location, ReefLevel level) {
 
         this.drivetrain = drivetrain;
-        this.wrist = wrist;
-        this.elevator = elevator;
-        this.grabber = grabber;
 
         this.side = side;
         this.location = location;
