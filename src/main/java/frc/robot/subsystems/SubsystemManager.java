@@ -157,8 +157,9 @@ public class SubsystemManager extends SubsystemBase {
         }
     }
 
-    private void stow() {
+    public void stow() {
         elevator.setWantedState(Elevator.WantedState.Stow);
+        elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
 /*
         grabber.setWantedState(Grabber.WantedState.Off);
         
@@ -172,11 +173,12 @@ public class SubsystemManager extends SubsystemBase {
     }
 
     private void scoreL2() {
-/* */
+
     }
 
-    private void removeBallL2() {
+    public void removeBallL2() {
         elevator.setWantedState(Elevator.WantedState.L2Ball);
+        elevator.setGoal(ElevatorConstants.ElevState.L2BALL.getValue());
 /*
         fourbar.setWantedState(FourBar.WantedState.RemoveBall);
         
@@ -184,8 +186,9 @@ public class SubsystemManager extends SubsystemBase {
 */
     }
 
-    private void removeBallL3() {
+    public void removeBallL3() {
         elevator.setWantedState(Elevator.WantedState.L3Ball);
+        elevator.setGoal(ElevatorConstants.ElevState.L3BALL.getValue());
 /*
         fourbar.setWantedState(FourBar.WantedState.RemoveBall);
         
@@ -193,8 +196,9 @@ public class SubsystemManager extends SubsystemBase {
 */
     }
 
-    private void shootBall() {
+    public void shootBall() {
         elevator.setWantedState(Elevator.WantedState.ShootBall);
+        elevator.setGoal(ElevatorConstants.ElevState.SHOOTBALL.getValue());
 /*
         fourbar.setWantedState(FourBar.WantedState.Shoot);
         
@@ -210,7 +214,7 @@ public class SubsystemManager extends SubsystemBase {
 
     }
 
-    private void groundBallIntake() {
+    public void groundBallIntake() {
 
         if (ballGrabber.hasBall()) {
             arm.setGoal(ArmConstants.ArmState.STOW.ArmgetValue());

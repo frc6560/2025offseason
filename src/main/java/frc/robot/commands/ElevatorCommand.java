@@ -6,15 +6,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import frc.robot.ManualControls;
+import frc.robot.subsystems.SubsystemManager;
 
 public class ElevatorCommand extends Command {
 
     private final Elevator elevator;
     private final PIDController elevatorPIDController;
     private final SimpleMotorFeedforward feedforward;
+    private final ManualControls controls;
+    
 
-    public ElevatorCommand(Elevator elevator) {
+    public ElevatorCommand(Elevator elevator, ManualControls controls) {
         this.elevator = elevator;
+        this.controls = controls;
+        
 
         this.elevatorPIDController = new PIDController(
                 ElevatorConstants.kP,
@@ -49,6 +55,21 @@ public class ElevatorCommand extends Command {
         PositionVoltage output = new PositionVoltage(pidOutput + ffOutput);
         elevator.getElevLeft().setControl(output);
         elevator.getElevRight().setControl(output);
+    }
+
+    public void periodic() {
+        if (controls.goToL1()){
+            elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
+        }
+        if (controls.goToL2Ball()){
+            elevator.setGoal(ElevatorConstants.ElevState.L2BALL.getValue());
+        }
+        if (controls.goToL3Ball()){
+            elevator.setGoal(ElevatorConstants.ElevState.L3BALL.getValue());
+        }
+        if (controls.goToShootBall()){
+            elevator.setGoal(ElevatorConstants.ElevState.SHOOTBALL.getValue());
+        }
     }
 
     @Override
