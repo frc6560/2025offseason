@@ -56,7 +56,7 @@ public class XboxControls {
     }
 
     public boolean goToL2(){
-        return secondXbox.getXButton();
+        return secondXbox.getAButton();//secondXbox.getXButton();
     }
 
     public boolean goToL3(){
@@ -71,10 +71,10 @@ public class XboxControls {
       return secondXbox.getRightBumperButton();
     }
 
-    // wrist
+    // Arm
 
     public boolean goToStow(){
-        return secondXbox.getBackButton(); // TODO change to correct button
+        return secondXbox.getXButton(); // TODO change to correct button
     }
 
     public boolean goToPickup(){
@@ -83,7 +83,7 @@ public class XboxControls {
     }
 
     public boolean goToReef(){
-        return secondXbox.getStartButton(); // TODO change to correct button
+        return secondXbox.getXButton(); // TODO change to correct button
     }
 
     public boolean goToGround(){

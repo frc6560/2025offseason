@@ -14,6 +14,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -25,6 +26,7 @@ import frc.robot.subsystems.ArmCommand;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
+import frc.robot.commands.XboxControls;
 import frc.robot.commands.keyboardControls;
 
 /**
@@ -38,11 +40,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/falcon"));
-                                                              
-  private final Arm arm = new Arm();
-  private final keyboardControls simControls = new keyboardControls(2);
-
-  private final ArmCommand armCommand = new ArmCommand(arm, simControls);
+  final XboxController firstXbox = new XboxController(0);
+  final XboxController secondXbox = new XboxController(1);                                                            
+  private final XboxControls controls = new XboxControls(firstXbox, secondXbox);
+  private final Arm arm;
   
 
 
@@ -94,10 +95,11 @@ public class RobotContainer {
   public RobotContainer()
   {
     // Configure the trigger bindings
+    arm = new Arm();
+    arm.setDefaultCommand(new ArmCommand(arm, controls));
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
-    arm.setDefaultCommand(armCommand);
   }
 
   /**
