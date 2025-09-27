@@ -86,7 +86,7 @@ public final class Constants
     /** Arm Setpoints (Degrees) */
     public static final double STOW_POSITION_DEG = 0.0+90.0;
     public static final double PICKUP_POSITION_DEG = -121.0+90.0;
-    public static final double REEF_POSITION_DEG = -11+90.0; //11.0+90.0;
+    public static final double REEF_POSITION_DEG = 45; //11.0+90.0;
     public static final double GROUND_PICKUP_DEG = 0.0+90.0; //31.0+90.0;
     public static final double PROCESSOR_DEG = 0.0+90.0;
     
