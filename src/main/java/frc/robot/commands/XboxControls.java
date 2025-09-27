@@ -74,7 +74,7 @@ public class XboxControls {
     // Arm
 
     public boolean goToStow(){
-        return secondXbox.getXButton(); // TODO change to correct button
+        return secondXbox.getAButton();
     }
 
     public boolean goToPickup(){
