@@ -60,7 +60,7 @@ public class Arm extends SubsystemBase {
     }
 
     public Arm() {
-        armMotor = new TalonFX(ArmConstants.MOTOR_ID);
+        armMotor = new TalonFX(ArmConstants.MOTOR_ID, "Canivore");
 
         TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
 

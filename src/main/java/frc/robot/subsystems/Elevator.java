@@ -70,6 +70,9 @@ public class Elevator extends SubsystemBase {
     public Elevator() {
         // Keep mechanism in SmartDashboard
 
+        final TalonFX ElevLeft = new TalonFX(ElevatorConstants.ElevLeftCanID, "Canivore");
+        final TalonFX ElevRight = new TalonFX(ElevatorConstants.ElevRightCanID, "Canivore");
+
         // TalonFX motor configuration
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;

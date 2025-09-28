@@ -12,6 +12,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.sim.CANcoderSimState;
 import com.ctre.phoenix6.sim.TalonFXSimState;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -99,7 +100,7 @@ public class Arm_mm extends SubsystemBase{
         IN_MOTION
     }
     public Arm_mm() {
-      armMotor = new TalonFX(ArmConstants.MOTOR_ID);
+      armMotor = new TalonFX(ArmConstants.MOTOR_ID, "Canivore");
       TalonFXConfiguration config = new TalonFXConfiguration();
       config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
       armMotor.getConfigurator().apply(config);
