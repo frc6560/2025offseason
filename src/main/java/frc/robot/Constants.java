@@ -79,6 +79,8 @@ public final class Constants
     public static final double ARM_LENGTH_METERS = 0.5; // TODO: measure (m)
     public static final double ARM_MASS_KG = 5.0;       // TODO: measure (kg)
     public static final double MAX_ANGLE_DEG = 121.0;
+    public static final double MIN_ANGLE_DEG = 0.0;
+    
 
     /** Gravity constant */
     public static final double GRAVITY = 9.81; // m/s^2
@@ -86,9 +88,10 @@ public final class Constants
     /** Arm Setpoints (Degrees) */
     public static final double STOW_POSITION_DEG = 0.0;
     public static final double PICKUP_POSITION_DEG = -121.0+90.0;
-    public static final double REEF_POSITION_DEG = -45; //11.0+90.0;
-    public static final double GROUND_PICKUP_DEG = 0.0+90.0; //31.0+90.0;
-    public static final double PROCESSOR_DEG = 0.0+90.0;
+    public static final double REEF_POSITION_DEG_low = -11; //11.0+90.0;
+    public static final double REEF_POSITION_DEG_high = -11; //11.0+90.0;
+    public static final double BARGE = 0.0; //31.0+90.0;
+    public static final double PROCESSOR_DEG = 0.0;
     
 
     // Absolute encoder setup
@@ -100,13 +103,15 @@ public final class Constants
     /** Arm Setpoints (Radians) */
     public static final double STOW_POSITION_RAD = Math.toRadians(STOW_POSITION_DEG);
     public static final double PICKUP_POSITION_RAD = Math.toRadians(PICKUP_POSITION_DEG);
-    public static final double REEF_POSITION_RAD = Math.toRadians(REEF_POSITION_DEG);
+    public static final double REEF_POSITION_RAD_high = Math.toRadians(REEF_POSITION_DEG_high);
+    public static final double REEF_POSITION_RAD_low = Math.toRadians(REEF_POSITION_DEG_low);
 
     /** Arm State Enum */
     public enum ArmState {
       STOW(STOW_POSITION_DEG),
       PICKUP(PICKUP_POSITION_DEG),
-      REEF(REEF_POSITION_DEG);
+      REEF_high(REEF_POSITION_DEG_high),
+      REEF_low(REEF_POSITION_DEG_low);
 
       public final double angleDeg;
 

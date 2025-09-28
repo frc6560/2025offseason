@@ -32,8 +32,9 @@ public class armm extends SubsystemBase {
     private final double[] targetPositions = {
         ArmConstants.STOW_POSITION_DEG, 
         ArmConstants.PICKUP_POSITION_DEG, 
-        ArmConstants.REEF_POSITION_DEG, 
-        ArmConstants.GROUND_PICKUP_DEG, 
+        ArmConstants.REEF_POSITION_DEG_high,
+        ArmConstants.REEF_POSITION_DEG_low, 
+        ArmConstants.BARGE, 
         ArmConstants.PROCESSOR_DEG 
     };
 
@@ -55,7 +56,8 @@ public class armm extends SubsystemBase {
     public enum State {
         STOW,
         PICKUP,
-        REEF,
+        REEF_HIGH,
+        REEF_LOW,
         GROUND,
         PROCESSOR,
         IN_MOTION
@@ -117,19 +119,21 @@ public class armm extends SubsystemBase {
     }
 
     public State getState() {
-        double padding = 1.5;
+        double padding = 1.5; // Tolerance in degrees
         double angle = getArmAngleDeg();
 
         if (Math.abs(angle - ArmConstants.STOW_POSITION_DEG) < padding) {
             return State.STOW;
         } else if (Math.abs(angle - ArmConstants.PICKUP_POSITION_DEG) < padding) {
             return State.PICKUP;
-        } else if (Math.abs(angle - ArmConstants.REEF_POSITION_DEG) < padding) {
-            return State.REEF;
-        } else if (Math.abs(angle - ArmConstants.GROUND_PICKUP_DEG) < padding) {
+        } else if (Math.abs(angle - ArmConstants.REEF_POSITION_DEG_low) < padding) {
+            return State.REEF_LOW;
+        } else if (Math.abs(angle - ArmConstants.BARGE) < padding) {
             return State.GROUND;
         } else if (Math.abs(angle - ArmConstants.PROCESSOR_DEG) < padding) {
             return State.PROCESSOR;
+        } else if (Math.abs(angle - ArmConstants.REEF_POSITION_DEG_high) < padding){
+            return State.REEF_HIGH;
         } else {
             return State.IN_MOTION;
         }

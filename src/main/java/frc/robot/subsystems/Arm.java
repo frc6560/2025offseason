@@ -37,8 +37,9 @@ public class Arm extends SubsystemBase {
     public enum State {
         STOW,
         PICKUP,
-        REEF,
-        GROUND,
+        REEF_LOW,
+        REEF_HIGH,
+        BARGE,
         PROCESSOR,
         IN_MOTION
     }
@@ -83,6 +84,9 @@ public class Arm extends SubsystemBase {
      */
     public void setGoal(double goalDeg) {
         // Convert degrees to motor rotations (assuming 81:1 gear ratio)
+
+        goalDeg = Math.max(Math.min(goalDeg, ArmConstants.MAX_ANGLE_DEG), ArmConstants.MIN_ANGLE_DEG);
+
         double rotations = (goalDeg / 360.0) * 81;
         
         // Calculate gravity feedforward based on current angle
@@ -138,12 +142,14 @@ public class Arm extends SubsystemBase {
             return State.STOW;
         } else if (Math.abs(angle - ArmConstants.PICKUP_POSITION_DEG) < padding) {
             return State.PICKUP;
-        } else if (Math.abs(angle - ArmConstants.REEF_POSITION_DEG) < padding) {
-            return State.REEF;
-        } else if (Math.abs(angle - ArmConstants.GROUND_PICKUP_DEG) < padding) {
-            return State.GROUND;
+        } else if (Math.abs(angle - ArmConstants.REEF_POSITION_DEG_low) < padding) {
+            return State.REEF_LOW;
+        } else if (Math.abs(angle - ArmConstants.BARGE) < padding) {
+            return State.BARGE;
         } else if (Math.abs(angle - ArmConstants.PROCESSOR_DEG) < padding) {
             return State.PROCESSOR;
+        } else if (Math.abs(angle - ArmConstants.REEF_POSITION_DEG_high) < padding){
+            return State.REEF_HIGH;
         } else {
             return State.IN_MOTION;
         }

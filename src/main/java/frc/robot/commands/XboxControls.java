@@ -64,7 +64,7 @@ public class XboxControls {
     }
 
     public boolean goToL4(){
-        return secondXbox.getYButton();
+        return secondXbox.getAButton();
     }
 
     public boolean shiftedControls(){
@@ -74,31 +74,35 @@ public class XboxControls {
     // Arm
 
     public boolean goToStow(){
-        return secondXbox.getAButton();
-    }
-
-    public boolean goToPickup(){
-        return firstXbox.getRightTriggerAxis() > 0.25;
-
-    }
-
-    public boolean goToReef(){
-        return secondXbox.getXButton(); // TODO change to correct button
-    }
-
-    public boolean goToGround(){
         return secondXbox.getLeftTriggerAxis() > 0.25;
     }
 
-    public boolean goToProcessor(){
+    public boolean goToPickup(){
         return secondXbox.getRightTriggerAxis() > 0.25;
+
+    }
+
+    public boolean goToReef_low(){
+        return secondXbox.getXButton(); // TODO change to correct button
+    }
+
+    public boolean goToReef_high(){
+      return secondXbox.getYButton(); // TODO change to correct button
+  }
+
+    public boolean goToBarge(){
+        return secondXbox.getAButton();
+    }
+
+    public boolean goToProcessor(){
+        return secondXbox.getAButton();
     }
 
     // pipe and ball grabber 
 
     // shifted for ball
     public boolean runGrabberIntake(){
-      return firstXbox.getLeftTriggerAxis() > 0.25;
+      return firstXbox.getAButton();
     }
 
     public boolean runGrabberOuttake() {

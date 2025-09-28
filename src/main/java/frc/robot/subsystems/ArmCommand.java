@@ -31,13 +31,15 @@ public class ArmCommand extends Command {
         targetState = State.STOW;
       } else if (controls.goToPickup()){
         targetState = State.PICKUP;
-      } else if (controls.goToGround()){
-        targetState = State.GROUND;
-      } else if (controls.goToReef()){
-        targetState = State.REEF;
+      } else if (controls.goToBarge()){
+        targetState = State.BARGE;
+      } else if (controls.goToReef_low()){
+        targetState = State.REEF_LOW;
       } else if (controls.goToProcessor()){
         targetState = State.PROCESSOR;
-      } 
+      } else if (controls.goToReef_high()){
+        targetState = State.REEF_HIGH;
+      }
        
     
       if(targetState == State.STOW){
@@ -48,19 +50,21 @@ public class ArmCommand extends Command {
 
         arm.setGoal(ArmConstants.PICKUP_POSITION_DEG);
 
-      } else if (targetState == State.GROUND){
+      } else if (targetState == State.BARGE){
 
-        arm.setGoal(ArmConstants.GROUND_PICKUP_DEG);
+        arm.setGoal(ArmConstants.BARGE);
 
-      } else if (targetState == State.REEF) {
+      } else if (targetState == State.REEF_LOW) {
 
-        arm.setGoal(ArmConstants.REEF_POSITION_DEG);
+        arm.setGoal(ArmConstants.REEF_POSITION_DEG_low);
 
       } else if (targetState == State.PROCESSOR) {
 
         arm.setGoal(ArmConstants.PROCESSOR_DEG);
 
-      } else {}
+      } else if (targetState == State.REEF_HIGH){
+        arm.setGoal(ArmConstants.REEF_POSITION_DEG_high);
+      }
 
     }
 
