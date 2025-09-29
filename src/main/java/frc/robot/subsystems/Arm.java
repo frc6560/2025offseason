@@ -85,7 +85,7 @@ public class Arm extends SubsystemBase {
     public void setGoal(double goalDeg) {
         // Convert degrees to motor rotations (assuming 81:1 gear ratio)
 
-        goalDeg = Math.max(Math.min(goalDeg, ArmConstants.MAX_ANGLE_DEG), ArmConstants.MIN_ANGLE_DEG);
+        //goalDeg = Math.max(Math.min(goalDeg, ArmConstants.MAX_ANGLE_DEG), ArmConstants.MIN_ANGLE_DEG);
 
         double rotations = (goalDeg / 360.0) * 81;
         
