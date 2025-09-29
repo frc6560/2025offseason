@@ -23,7 +23,7 @@ import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.subsystems.swervedrive.*;
 import frc.robot.subsystems.Elevator;
-//import frc.robot.subsystems.FourBar;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.BallGrabber; 
 
 
@@ -160,12 +160,12 @@ public class SubsystemManager extends SubsystemBase {
     public void stow() {
         elevator.setWantedState(Elevator.WantedState.Stow);
         elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
-/*
-        grabber.setWantedState(Grabber.WantedState.Off);
+
+        arm.setArmGoal(ArmConstants.STOW_POSITION_DEG);
         
-        fourbar.setWantedState(FourBar.WantedState.Stow)
+        ballGrabber.stop();
         
-*/
+
     }
 
     private void scoreL1() {
@@ -179,31 +179,29 @@ public class SubsystemManager extends SubsystemBase {
     public void removeBallL2() {
         elevator.setWantedState(Elevator.WantedState.L2Ball);
         elevator.setGoal(ElevatorConstants.ElevState.L2BALL.getValue());
-/*
-        fourbar.setWantedState(FourBar.WantedState.RemoveBall);
+
+        arm.setArmGoal(ArmConstants.REEF_POSITION_DEG_low);
         
-        grabber.setWantedState(Grabber.WantedState.Intake);
-*/
+        ballGrabber.runIntakeOuttake();
+
     }
 
     public void removeBallL3() {
         elevator.setWantedState(Elevator.WantedState.L3Ball);
         elevator.setGoal(ElevatorConstants.ElevState.L3BALL.getValue());
-/*
-        fourbar.setWantedState(FourBar.WantedState.RemoveBall);
+
+        arm.setArmGoal(ArmConstants.REEF_POSITION_DEG_high);
         
-        grabber.setWantedState(Grabber.WantedState.Intake);
-*/
+        ballGrabber.runIntakeOuttake();
+
     }
 
     public void shootBall() {
         elevator.setWantedState(Elevator.WantedState.ShootBall);
         elevator.setGoal(ElevatorConstants.ElevState.SHOOTBALL.getValue());
-/*
-        fourbar.setWantedState(FourBar.WantedState.Shoot);
-        
-        grabber.setWantedState(Grabber.WantedState.Shoot);
-*/
+
+        arm.setArmGoal(ArmConstants.BARGE);
+
     }
 
     private void stationIntake() {
@@ -217,14 +215,11 @@ public class SubsystemManager extends SubsystemBase {
     public void groundBallIntake() {
 
         if (ballGrabber.hasBall()) {
-            arm.setGoal(ArmConstants.ArmState.STOW.ArmgetValue());
-        } else {
-            arm.setGoal(ArmConstants.ArmState.PICKUP.ArmgetValue());
+            arm.setArmGoal(ArmConstants.STOW_POSITION_DEG);
         }
+
         elevator.setWantedState(Elevator.WantedState.Stow);
         elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
         ballGrabber.runIntakeOuttake();
-
     }
-
 }

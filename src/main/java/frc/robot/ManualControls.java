@@ -78,12 +78,29 @@ public class ManualControls {
     // wrist
 
     public boolean goToStow(){
-        return secondXbox.getBackButton(); // TODO change to correct button
-    }
+      return secondXbox.getLeftTriggerAxis() > 0.25;
+  }
 
-    public boolean goToPickup(){
-        return secondXbox.getRightTriggerAxis() > 0.25;
-    }
+  public boolean goToPickup(){
+      return secondXbox.getRightTriggerAxis() > 0.25;
+
+  }
+
+  public boolean goToReef_low(){
+      return false; // TODO change to correct button
+  }
+
+  public boolean goToReef_high(){
+    return false; // TODO change to correct button
+}
+
+  public boolean goToBarge(){
+      return false;
+  }
+
+  public boolean goToProcessor(){
+      return false;
+  }
 
     // pipe and ball grabber 
 
@@ -95,6 +112,7 @@ public class ManualControls {
     public boolean runGrabberOuttake() {
       return firstXbox.getRightBumper(); // change if inconvenient
     }
+    
     public boolean goToPlacePos() {
       return secondXbox.getLeftBumperButton();
     }
