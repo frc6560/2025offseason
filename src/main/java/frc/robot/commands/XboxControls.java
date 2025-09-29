@@ -60,7 +60,7 @@ public class XboxControls {
     }
 
     public boolean goToL3(){
-        return secondXbox.getBButton();
+        return secondXbox.getAButton();
     }
 
     public boolean goToL4(){
@@ -74,11 +74,11 @@ public class XboxControls {
     // Arm
 
     public boolean goToStow(){
-        return secondXbox.getLeftTriggerAxis() > 0.25;
+        return secondXbox.getBButton();//secondXbox.getLeftTriggerAxis() > 0.25
     }
 
     public boolean goToPickup(){
-        return secondXbox.getRightTriggerAxis() > 0.25;
+        return secondXbox.getYButton();
 
     }
 
@@ -87,7 +87,7 @@ public class XboxControls {
     }
 
     public boolean goToReef_high(){
-      return secondXbox.getYButton(); // TODO change to correct button
+      return secondXbox.getAButton(); // TODO change to correct button
   }
 
     public boolean goToBarge(){
