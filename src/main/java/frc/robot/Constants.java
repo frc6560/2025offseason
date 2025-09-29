@@ -78,8 +78,8 @@ public final class Constants
     public static final double ENCODER_GEAR_RATIO = 81.0; // Encoder reduction ratio
     public static final double ARM_LENGTH_METERS = 0.5; // TODO: measure (m)
     public static final double ARM_MASS_KG = 5.0;       // TODO: measure (kg)
-    public static final double MAX_ANGLE_DEG = 121.0;
-    public static final double MIN_ANGLE_DEG = 0.0;
+    public static final double MAX_ANGLE_DEG = 0.0;
+    public static final double MIN_ANGLE_DEG = -70.0;
     
 
     /** Gravity constant */
