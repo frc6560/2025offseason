@@ -155,6 +155,7 @@ public final class Constants
     public static final double REEF_POSITION_DEG_high = -11; //11.0+90.0;
     public static final double BARGE = 0.0; //31.0+90.0;
     public static final double PROCESSOR_DEG = 0.0;
+    public static final double GPICKUP_POSITION_DEG = 0.0; //PLACEHOLDEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER
     
 
     // Absolute encoder setup

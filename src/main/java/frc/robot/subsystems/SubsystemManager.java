@@ -216,6 +216,8 @@ public class SubsystemManager extends SubsystemBase {
 
         if (ballGrabber.hasBall()) {
             arm.setArmGoal(ArmConstants.STOW_POSITION_DEG);
+        } else {
+            arm.setArmGoal(ArmConstants.GPICKUP_POSITION_DEG); //PLACEHOLDER ARM POSITION, UPDATE ONCE KEVIN FINISH
         }
 
         elevator.setWantedState(Elevator.WantedState.Stow);

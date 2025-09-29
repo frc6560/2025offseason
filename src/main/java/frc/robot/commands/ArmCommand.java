@@ -27,45 +27,6 @@ public class ArmCommand extends Command {
     @Override
     public void execute(){
 
-        if (controls.goToStow()){
-            targetState = State.STOW;
-        } else if (controls.goToPickup()){
-            targetState = State.PICKUP;
-        } else if (controls.goToBarge()){
-            targetState = State.BARGE;
-        } else if (controls.goToReef_low()){
-            targetState = State.REEF_LOW;
-        } else if (controls.goToProcessor()){
-            targetState = State.PROCESSOR;
-        } else if (controls.goToReef_high()){
-            targetState = State.REEF_HIGH;
-        }
-        
-        
-        if(targetState == State.STOW){
-
-            arm.setArmGoal(ArmConstants.STOW_POSITION_DEG);
-
-        } else if (targetState == State.PICKUP){
-
-            arm.setArmGoal(ArmConstants.PICKUP_POSITION_DEG);
-
-        } else if (targetState == State.BARGE){
-
-            arm.setArmGoal(ArmConstants.BARGE);
-
-        } else if (targetState == State.REEF_LOW) {
-
-            arm.setArmGoal(ArmConstants.REEF_POSITION_DEG_low);
-
-        } else if (targetState == State.PROCESSOR) {
-
-            arm.setArmGoal(ArmConstants.PROCESSOR_DEG);
-
-        } else if (targetState == State.REEF_HIGH){
-            arm.setArmGoal(ArmConstants.REEF_POSITION_DEG_high);
-        }
-
     }
 
     @Override

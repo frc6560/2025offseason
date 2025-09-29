@@ -96,7 +96,14 @@ public class SubsystemManagerCommand {
     public void periodic() {
         if (controls.goToStow()) {
             subsystemManager.stow();
+        } else if (controls.goToL2Ball()) {
+            subsystemManager.removeBallL2();
+        } else if (controls.goToL3Ball()) {
+            subsystemManager.removeBallL3();
+        } else if (controls.goToShootBall()) {
+            subsystemManager.shootBall();
+        } else if (controls.goToGroundBall()) {
+            subsystemManager.groundBallIntake();
         }
     }
-
 }

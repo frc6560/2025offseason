@@ -55,10 +55,6 @@ public class ManualControls {
 
     // elevator
 
-    public boolean goToL1(){
-        return secondXbox.getAButton();
-    }
-
     public boolean goToL2Ball(){
         return secondXbox.getXButton();
     }
@@ -75,10 +71,11 @@ public class ManualControls {
       return secondXbox.getRightBumperButton();
     }
 
+
     // wrist
 
     public boolean goToStow(){
-      return secondXbox.getLeftTriggerAxis() > 0.25;
+      return secondXbox.getAButton();
   }
 
   public boolean goToPickup(){
@@ -86,12 +83,16 @@ public class ManualControls {
 
   }
 
+  public boolean goToGroundBall() {
+    return secondXbox.getBackButton();
+  }
+
   public boolean goToReef_low(){
-      return false; // TODO change to correct button
+      return false;
   }
 
   public boolean goToReef_high(){
-    return false; // TODO change to correct button
+    return false;
 }
 
   public boolean goToBarge(){
@@ -105,12 +106,8 @@ public class ManualControls {
     // pipe and ball grabber 
 
     // shifted for ball
-    public boolean runGrabberIntake(){
+    public boolean runGrabberIntakeOuttake(){
       return secondXbox.getLeftTriggerAxis() > 0.25;
-    }
-
-    public boolean runGrabberOuttake() {
-      return firstXbox.getRightBumper(); // change if inconvenient
     }
     
     public boolean goToPlacePos() {

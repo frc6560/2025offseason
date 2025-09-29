@@ -58,20 +58,9 @@ public class ElevatorCommand extends Command {
     }
 
     public void periodic() {
-        if (controls.goToL1()){
-            elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
-        }
-        if (controls.goToL2Ball()){
-            elevator.setGoal(ElevatorConstants.ElevState.L2BALL.getValue());
-        }
-        if (controls.goToL3Ball()){
-            elevator.setGoal(ElevatorConstants.ElevState.L3BALL.getValue());
-        }
-        if (controls.goToShootBall()){
-            elevator.setGoal(ElevatorConstants.ElevState.SHOOTBALL.getValue());
-        }
+        
     }
-
+    
     @Override
     public boolean isFinished() {
         return false; // Runs until interrupted
