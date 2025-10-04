@@ -31,11 +31,13 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.BallGrabber; 
 
+import frc.robot.Constants;
 import frc.robot.subsystems.SubsystemManager;
 
 import java.util.Optional;
 
-public class SubsystemManagerCommand {
+public class SubsystemManagerCommand extends Command{
+
     private final SwerveSubsystem swerveSubsystem;
     private final Elevator elevator;
     private final Arm arm;
@@ -91,9 +93,18 @@ public class SubsystemManagerCommand {
         this.ballGrabber = ballGrabber;
         this.controls = controls;
         this.subsystemManager = subsystemManager;
+
+        addRequirements(subsystemManager);
     }
 
-    public void periodic() {
+
+    public void initialize() {
+        ballGrabber.stop();
+        arm.setArmGoal(Constants.ArmConstants.REEF_POSITION_DEG_high);
+        elevator.setGoal(Constants.ElevatorConstants.SHOOTBALL);
+    }
+
+    public void execute() {
         if (controls.goToStow()) {
             subsystemManager.stow();
         } else if (controls.goToL2Ball()) {

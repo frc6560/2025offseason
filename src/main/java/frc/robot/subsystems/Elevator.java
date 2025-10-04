@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -14,12 +15,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableBuilder;  
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.ElevatorConstants;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Timer; 
 
 public class Elevator extends SubsystemBase {
 
@@ -57,27 +58,26 @@ public class Elevator extends SubsystemBase {
 
     private WantedState wantedState = WantedState.Idle;
 
-    // Mechanism2d for SmartDashboard visualization
-    private final Mechanism2d mechanism = new Mechanism2d(2, 5);
-    private final MechanismRoot2d root = mechanism.getRoot("ElevatorBase", 1.0, 0);
-    private final MechanismLigament2d elevatorLift =
-            root.append(new MechanismLigament2d("ElevatorLift", 0.0, 90));
+    // // Mechanism2d for SmartDashboard visualization
+    // private final Mechanism2d mechanism = new Mechanism2d(2, 5);
+    // private final MechanismRoot2d root = mechanism.getRoot("ElevatorBase", 1.0, 0);
+    // private final MechanismLigament2d elevatorLift =
+    //         root.append(new MechanismLigament2d("ElevatorLift", 0.0, 90));
 
-    // Shuffleboard tab for numeric + boolean properties
-    private final ShuffleboardTab tab = Shuffleboard.getTab("Elevator");
-    double startTime = 0;
+    // // Shuffleboard tab for numeric + boolean properties
+    // private final ShuffleboardTab tab = Shuffleboard.getTab("Elevator");
+    // double startTime = 0;
 
     public Elevator() {
         // Keep mechanism in SmartDashboard
 
-        final TalonFX ElevLeft = new TalonFX(ElevatorConstants.ElevLeftCanID, "Canivore");
-        final TalonFX ElevRight = new TalonFX(ElevatorConstants.ElevRightCanID, "Canivore");
-
         // TalonFX motor configuration
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         Slot0Configs elevatorPID = new Slot0Configs();
+        
         elevatorPID.kP = ElevatorConstants.kP;
         elevatorPID.kI = ElevatorConstants.kI;
         elevatorPID.kD = ElevatorConstants.kD;
@@ -86,46 +86,42 @@ public class Elevator extends SubsystemBase {
         ElevLeft.getConfigurator().apply(config.withSlot0(elevatorPID));
         ElevRight.getConfigurator().apply(config.withSlot0(elevatorPID));
         
+
         // Register this subsystem in Shuffleboard for AdvantageScope to see Sendable properties
-        tab.add(this);
-        
-        if (RobotBase.isSimulation()) {
-            startTime = Timer.getFPGATimestamp();
-        }
+        // tab.add(this);
+        // config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        // ElevRight.getConfigurator().apply(config);
+        // if (RobotBase.isSimulation()) {
+        //     startTime = Timer.getFPGATimestamp();
+        // }
     }
 
     @Override
     public void periodic() {
-        if (RobotBase.isSimulation()) {
+        // if (RobotBase.isSimulation()) {
 
-            double elevatorHeight = getElevatorHeight();
+        //     double elevatorHeight = getElevatorHeight();
 
-            // Visualization
-            double currentTime = Timer.getFPGATimestamp();
-            double elapsedTime = currentTime - startTime;
+        //     // Visualization
+        //     double currentTime = Timer.getFPGATimestamp();
+        //     double elapsedTime = currentTime - startTime;
 
-            if (elapsedTime >= 3) {
-                setGoal(ElevatorConstants.ElevState.SHOOTBALL.getValue());
-            }
+        //     if (elapsedTime >= 3) {
+        //         setGoal(ElevatorConstants.ElevState.SHOOTBALL.getValue());
+        //     }
 
-            if (elapsedTime >= 12) {
-                setGoal(ElevatorConstants.ElevState.L2BALL.getValue());
-            }
+        //     if (elapsedTime >= 12) {
+        //         setGoal(ElevatorConstants.ElevState.L2BALL.getValue());
+        //     }
 
-            if (elapsedTime >= 18) {
-                setGoal(ElevatorConstants.ElevState.L3BALL.getValue());
-                startTime = Timer.getFPGATimestamp();
-            }
+        //     if (elapsedTime >= 18) {
+        //         setGoal(ElevatorConstants.ElevState.L3BALL.getValue());
+        //         startTime = Timer.getFPGATimestamp();
+        //     }
 
-            SmartDashboard.putData("ElevatorMechanism", mechanism);
-            
-            setControl();
-
-            
-            
-
-        }
+        //     SmartDashboard.putData("ElevatorMechanism", mechanism);
     }
+    
 
     @Override
     public void initSendable(SendableBuilder builder) {
@@ -193,8 +189,8 @@ public class Elevator extends SubsystemBase {
         setSetpoint(targetState);
         ElevLeft.setControl(m_request);
         ElevRight.setControl(m_request);
-        elevatorLift.setLength(m_request.Position);
+        // elevatorLift.setLength(m_request.Position);
         System.out.println(m_request.Position);
-        elevatorLift.setAngle(90);
+        // elevatorLift.setAngle(90);
     }
 }

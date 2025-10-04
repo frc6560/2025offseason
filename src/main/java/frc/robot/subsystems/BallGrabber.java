@@ -58,8 +58,8 @@ public class BallGrabber extends SubsystemBase {
     //   private final NetworkTableEntry ntDutyCycle = ntTable.getEntry("Ball Grabber Velocity");
 
     public BallGrabber() {
-        this.grabberMotor = new TalonFX(1); 
-        this.grabberMotorRange = new CANrange(0); 
+        this.grabberMotor = new TalonFX(60, "Canivore"); 
+        this.grabberMotorRange = new CANrange(59, "Canivore"); 
 
     }
 

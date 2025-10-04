@@ -38,9 +38,6 @@ public class ElevatorCommand extends Command {
     @Override
     public void initialize() {
         elevator.stopElev();
-        elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
-        elevator.setSetpoint(new edu.wpi.first.math.trajectory.TrapezoidProfile.State(
-                ElevatorConstants.ElevState.STOW.getValue(), 0));
     }
 
     @Override

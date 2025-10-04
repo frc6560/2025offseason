@@ -20,8 +20,7 @@ public class ArmCommand extends Command {
 
     @Override
     public void initialize() {
-        arm.setArmGoal(ArmConstants.STOW_POSITION_DEG); // Use the correct constant name
-        targetState = Arm.State.STOW; // Set initial target state to STOW
+        
     }
 
     @Override

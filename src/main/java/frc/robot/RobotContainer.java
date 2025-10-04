@@ -17,6 +17,8 @@ import frc.robot.commands.BallGrabberCommand;
 import java.io.File;
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.swervedrive.*;
+import frc.robot.subsystems.SubsystemManager;
+import frc.robot.commands.SubsystemManagerCommand;
 
 public class RobotContainer {
 
@@ -32,6 +34,7 @@ public class RobotContainer {
     private final Arm arm = new Arm();
     private final BallGrabber ballGrabber = new BallGrabber();
     private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve/falcon"));
+    private final SubsystemManager subsystemManager = new SubsystemManager(drivebase, elevator, arm, ballGrabber);
 
     
 
@@ -44,6 +47,8 @@ public class RobotContainer {
       elevator.setDefaultCommand(new ElevatorCommand(elevator,controls));
         
       ballGrabber.setDefaultCommand(new BallGrabberCommand(ballGrabber, controls));
+
+      subsystemManager.setDefaultCommand(new SubsystemManagerCommand(drivebase, elevator, arm, ballGrabber, controls, subsystemManager));
       
 
     }

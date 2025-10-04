@@ -63,7 +63,7 @@ public final class Constants
     public static final double kMaxV = 3;
     public static final double kMaxA = 3;
 
-    public static final double kG = 0.4;
+    public static final double kG = -0.01;
     
       
         
@@ -95,14 +95,18 @@ public final class Constants
         public static final double NumInPerRot = 13.4962820398;
         public static final double WristHeightOffGround = 17;
         //need to be tested
-        public static final double L1ORSTOW = HeightToRotations(18);
+
+
         public static final double L2 = /*5*/ HeightToRotations(32);
         public static final double L3 = /*10*/HeightToRotations(47.625);
         public static final double L4 = /*15*/ HeightToRotations(72);
         public static final double REMOVEBALLL2 = /*4*/ HeightToRotations(32 + 8.125);
         public static final double REMOVEBALLL3 = /*8*/ HeightToRotations(47.625 + 8.125);
         public static final double SHOOTBALL = /*18*/ HeightToRotations(76 + 8.125);
-      
+        public static final double L2BALL = HeightToRotations(32 + 8.125);
+        public static final double L3BALL = 20;//HeightToRotations(47.625 + 8.125);
+        public static final double STOW = HeightToRotations(18);
+        public static final double GROUNDBALL = HeightToRotations(20);
     
   }
 
@@ -110,7 +114,7 @@ public final class Constants
   {
     /** CAN IDs */
     public static final int MOTOR_ID = 40;      // TODO: set correct ID
-    public static final int ENCODER_ID = 0;    // TODO: set correct ID
+    // TODO: set correct ID
 
     /** Characterization Gains */
     public static final double kS = 0.0;
