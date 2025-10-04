@@ -30,11 +30,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 
     @Override
     public void execute() {
-        if(controls.shiftedControls()){
-            if(controls.runGrabberIntake()){
-                ballGrabber.runIntakeOuttake();
+        if(controls.runGrabberIntake()){
+            if(ballGrabber.ballDetected()){
+                ballGrabber.outtake();
             } else {
-                ballGrabber.stop();
+                ballGrabber.intake();
             }
         }
         else{
