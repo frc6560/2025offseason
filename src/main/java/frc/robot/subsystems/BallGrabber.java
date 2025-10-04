@@ -33,36 +33,38 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static edu.wpi.first.units.Units.Degree;
 
 public class BallGrabber extends SubsystemBase {
-    private final TalonFX grabberMotor; 
-
-   // private final CANrange grabberMotorRange; // Range for TalonFX IDs
-
-    // encoder stuff
-  //private CANcoder m_relativeEncoder;
-  //private double initialEncoderPos;
- // private TalonFXConfiguration fxConfig;
+    private final TalonFX grabberMotor;
     
-
-
-    private static final double INTAKE_SPEED = -0.3;
-    private static final double OUTTAKE_SPEED = 0.7; 
-
-    private static final double MAX_CURRENT_RUNNING = 30; 
-    private static final double BALL_DETECTION_DISTANCE = 20; //  threshold to detect if a ball is present
+        private CANrange grabberMotorRange; 
     
-
-
-
-//   private final NetworkTable ntTable = NetworkTableInstance.getDefault().getTable("BallGrabber");
-//   private final NetworkTableEntry ntCurrent = ntTable.getEntry("Ball Grabber Current");
-//   private final NetworkTableEntry ntVoltage = ntTable.getEntry("Ball Grabber Voltage");
-//   private final NetworkTableEntry ntSpeed = ntTable.getEntry("Ball Grabber Speed");
-//   private final NetworkTableEntry ntDutyCycle = ntTable.getEntry("Ball Grabber Velocity");
-
-    public BallGrabber() {
-       //this.grabberMotor = new TalonFX(1, "grabberMotorRange");
-       this.grabberMotor = new TalonFX(1); 
-      // this.grabberMotorRange = new CANrange(0); 
+       // private final CANrange grabberMotorRange; // Range for TalonFX IDs
+    
+        // encoder stuff
+      //private CANcoder m_relativeEncoder;
+      //private double initialEncoderPos;
+     // private TalonFXConfiguration fxConfig;
+        
+    
+    
+        private static final double INTAKE_SPEED = -0.3;
+        private static final double OUTTAKE_SPEED = 0.7; 
+    
+        private static final double MAX_CURRENT_RUNNING = 30; 
+        private static final double BALL_DETECTION_DISTANCE = 20; //  threshold to detect if a ball is present
+        
+    
+    
+    
+    //   private final NetworkTable ntTable = NetworkTableInstance.getDefault().getTable("BallGrabber");
+    //   private final NetworkTableEntry ntCurrent = ntTable.getEntry("Ball Grabber Current");
+    //   private final NetworkTableEntry ntVoltage = ntTable.getEntry("Ball Grabber Voltage");
+    //   private final NetworkTableEntry ntSpeed = ntTable.getEntry("Ball Grabber Speed");
+    //   private final NetworkTableEntry ntDutyCycle = ntTable.getEntry("Ball Grabber Velocity");
+    
+        public BallGrabber() {
+           this.grabberMotor = new TalonFX(1, "grabberMotorRange");
+           //this.grabberMotor = new TalonFX(1); 
+          this.grabberMotorRange = new CANrange(0); 
        
 
     }
@@ -88,7 +90,7 @@ public class BallGrabber extends SubsystemBase {
 // }
 public void runIntakeOuttake(){
  var range = grabberMotorRange.getDistance().getValueAsDouble(); 
-    if(range < BALL_DETECTION_DISTANCE &&grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING){
+    if(range < BALL_DETECTION_DISTANCE && grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING){
         grabberMotor.set(OUTTAKE_SPEED);
     } else{
         grabberMotor.set(INTAKE_SPEED);
