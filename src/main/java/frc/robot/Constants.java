@@ -45,8 +45,8 @@ public final class Constants
   public static final class ElevatorConstants {
     
     //unknown
-    public static int ElevLeftCanID = 1;
-    public static int ElevRightCanID = 2;
+    public static int ElevLeftCanID = 15;
+    public static int ElevRightCanID = 16;
     
     public static final int TopLimitSwitchID = 3;
     public static final int BotLimitSwitchID = 4;
