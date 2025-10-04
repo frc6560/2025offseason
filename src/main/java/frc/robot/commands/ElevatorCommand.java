@@ -1,54 +1,61 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator;
-import com.ctre.phoenix6.controls.PositionVoltage;
+import frc.robot.subsystems.Elevator.WantedState;
+import frc.robot.ManualControls;
 
 public class ElevatorCommand extends Command {
 
     private final Elevator elevator;
-    private final PIDController elevatorPIDController;
-    private final SimpleMotorFeedforward feedforward;
+    private final ManualControls controls;
+    private WantedState targetState;
 
-    public ElevatorCommand(Elevator elevator) {
+    public ElevatorCommand(Elevator elevator, ManualControls controls) {
         this.elevator = elevator;
-
-        this.elevatorPIDController = new PIDController(
-                ElevatorConstants.kP,
-                ElevatorConstants.kI,
-                ElevatorConstants.kD);
-
-        this.feedforward = new SimpleMotorFeedforward(
-                ElevatorConstants.kS,
-                ElevatorConstants.kV,
-                ElevatorConstants.kA);
-
+        this.controls = controls;
         addRequirements(elevator);
     }
 
     @Override
     public void initialize() {
         elevator.stopElev();
+        targetState = WantedState.Stow;
         elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
         elevator.setSetpoint(new edu.wpi.first.math.trajectory.TrapezoidProfile.State(
-                ElevatorConstants.ElevState.STOW.getValue(), 0));
+                elevator.getElevatorHeight(), 0)); // Initialize to current position
     }
 
     @Override
     public void execute() {
-        double currentPosition = elevator.getElevatorHeight();
-        double targetPosition = elevator.getGoalValue();
-        double targetVelocity = elevator.getSetpoint().velocity;
+        // Check controller inputs to determine target state
+        // You'll need to add these methods to XboxControls:
+        // goToStow(), goToL2Ball(), goToL3Ball(), goToShootBall()
+        
+        if (controls.goToStow()) {
+            targetState = WantedState.Stow;
+        } else if (controls.goToL2Ball()) {
+            targetState = WantedState.L2Ball;
+        } else if (controls.goToL3Ball()) {
+            targetState = WantedState.L3Ball;
+        } else if (controls.goToShootBall()) {
+            targetState = WantedState.ShootBall;
+        }
 
-        double pidOutput = elevatorPIDController.calculate(currentPosition, targetPosition);
-        double ffOutput = feedforward.calculate(targetVelocity) / 12.0;
+        // Set goal based on target state
+        if (targetState == WantedState.Stow) {
+            elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
+        } else if (targetState == WantedState.L2Ball) {
+            elevator.setGoal(ElevatorConstants.ElevState.L2BALL.getValue());
+        } else if (targetState == WantedState.L3Ball) {
+            elevator.setGoal(ElevatorConstants.ElevState.L3BALL.getValue());
+        } else if (targetState == WantedState.ShootBall) {
+            elevator.setGoal(ElevatorConstants.ElevState.SHOOTBALL.getValue());
+        }
 
-        PositionVoltage output = new PositionVoltage(pidOutput + ffOutput);
-        elevator.getElevLeft().setControl(output);
-        elevator.getElevRight().setControl(output);
+        // Execute the motion profile control
+        elevator.setControl();
     }
 
     @Override
