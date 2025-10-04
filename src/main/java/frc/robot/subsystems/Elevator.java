@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -73,6 +74,7 @@ public class Elevator extends SubsystemBase {
         // TalonFX motor configuration
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        
 
         Slot0Configs elevatorPID = new Slot0Configs();
         elevatorPID.kP = ElevatorConstants.kP;
@@ -85,7 +87,8 @@ public class Elevator extends SubsystemBase {
         
         // Register this subsystem in Shuffleboard for AdvantageScope to see Sendable properties
         tab.add(this);
-        
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        ElevRight.getConfigurator().apply(config);
         if (RobotBase.isSimulation()) {
             startTime = Timer.getFPGATimestamp();
         }
