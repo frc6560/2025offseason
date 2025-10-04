@@ -63,7 +63,7 @@ public final class Constants
     public static final double kMaxV = 3;
     public static final double kMaxA = 3;
 
-    public static final double kG = -0.01;
+    public static final double kG = 0.4;
     
       
         
