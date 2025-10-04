@@ -55,7 +55,7 @@ public class ElevatorCommand extends Command {
         }
 
         // Execute the motion profile control
-        elevator.setControl();
+        
     }
 
     @Override

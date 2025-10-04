@@ -55,7 +55,7 @@ public class ManualControls {
 
     // elevator
 
-    public boolean goToL1(){
+    public boolean goToStow(){
         return secondXbox.getAButton();
     }
 
@@ -77,7 +77,7 @@ public class ManualControls {
 
     // wrist
 
-    public boolean goToStow(){
+    public boolean goToArmStow(){
         return secondXbox.getBackButton(); // TODO change to correct button
     }
 
