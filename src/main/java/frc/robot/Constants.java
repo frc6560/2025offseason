@@ -97,16 +97,16 @@ public final class Constants
         //need to be tested
 
 
-        public static final double L2 = /*5*/ HeightToRotations(32);
-        public static final double L3 = /*10*/HeightToRotations(47.625);
-        public static final double L4 = /*15*/ HeightToRotations(72);
-        public static final double REMOVEBALLL2 = /*4*/ HeightToRotations(32 + 8.125);
-        public static final double REMOVEBALLL3 = /*8*/ HeightToRotations(47.625 + 8.125);
-        public static final double SHOOTBALL = /*18*/ HeightToRotations(76 + 8.125);
-        public static final double L2BALL = HeightToRotations(32 + 8.125);
+        public static final double L2 = 5;///*5*/ HeightToRotations(32);
+        public static final double L3 = 10;///*10*/HeightToRotations(47.625);
+        public static final double L4 = 15;///*15*/ HeightToRotations(72);
+        public static final double REMOVEBALLL2 = 4;///*4*/ HeightToRotations(32 + 8.125);
+        public static final double REMOVEBALLL3 = 8;///*8*/ HeightToRotations(47.625 + 8.125);
+        public static final double SHOOTBALL = 25;///*18*/ HeightToRotations(76 + 8.125);
+        public static final double L2BALL = 15;//HeightToRotations(32 + 8.125);
         public static final double L3BALL = 20;//HeightToRotations(47.625 + 8.125);
-        public static final double STOW = HeightToRotations(18);
-        public static final double GROUNDBALL = HeightToRotations(20);
+        public static final double STOW = 0;//HeightToRotations(18);
+        public static final double GROUNDBALL = 1.5;//HeightToRotations(20);
     
   }
 
@@ -153,7 +153,7 @@ public final class Constants
     public static final double GRAVITY = 9.81; // m/s^2
 
     /** Arm Setpoints (Degrees) */
-    public static final double STOW_POSITION_DEG = 0.0;
+    public static final double STOW_POSITION_DEG = -1.0;
     public static final double PICKUP_POSITION_DEG = -121.0+90.0;
     public static final double REEF_POSITION_DEG_low = -11; //11.0+90.0;
     public static final double REEF_POSITION_DEG_high = -11; //11.0+90.0;

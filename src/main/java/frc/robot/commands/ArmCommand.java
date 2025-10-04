@@ -20,7 +20,6 @@ public class ArmCommand extends Command {
 
     @Override
     public void initialize() {
-        
     }
 
     @Override

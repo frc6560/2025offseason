@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -49,6 +50,7 @@ public class Arm extends SubsystemBase {
 
         // Configure TalonFX
         TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
+        talonFXConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // PID and feedforward configuration
         Slot0Configs slot0 = talonFXConfigs.Slot0;

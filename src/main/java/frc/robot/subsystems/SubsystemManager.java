@@ -38,38 +38,6 @@ public class SubsystemManager extends SubsystemBase {
     private final BallGrabber ballGrabber;
 
     private final CommandXboxController controller = new CommandXboxController(0);
-    
-    public enum WantedSuperState {
-        Stow,
-        ScoreL1,
-        ScoreL2,
-        ScoreL3,
-        ScoreL4,
-        RemoveBallL2,
-        RemoveBallL3,
-        ShootBall,
-        StationIntake,
-        GroundCoralIntake,
-        GroundBallIntake
-    }
-
-    public enum CurrentSuperState {
-        Stow,
-        ScoreL1,
-        ScoreL2,
-        ScoreL3,
-        ScoreL4,
-        RemoveBallL2,
-        RemoveBallL3,
-        ShootBall,
-        StationIntake,
-        GroundCoralIntake,
-        GroundBallIntake
-    }
-
-    private WantedSuperState wantedSuperState = WantedSuperState.Stow;
-    private CurrentSuperState currentSuperState = CurrentSuperState.Stow;
-    private CurrentSuperState previousSuperState;
 
 
     public SubsystemManager(
@@ -142,7 +110,7 @@ public class SubsystemManager extends SubsystemBase {
     public void groundBallIntake() {
 
         if (ballGrabber.hasBall()) {
-            arm.setArmGoal(ArmConstants.STOW_POSITION_DEG);
+            arm.setArmGoal(ArmConstants.GPICKUP_POSITION_DEG);
         } else {
             arm.setArmGoal(ArmConstants.GPICKUP_POSITION_DEG); //Should hopefully work, updated
         }

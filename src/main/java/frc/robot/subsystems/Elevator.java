@@ -72,9 +72,12 @@ public class Elevator extends SubsystemBase {
         // Keep mechanism in SmartDashboard
 
         // TalonFX motor configuration
-        TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        TalonFXConfiguration configLeft = new TalonFXConfiguration();
+        TalonFXConfiguration configRight = new TalonFXConfiguration();
+        configLeft.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        configLeft.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        configRight.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        configRight.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         Slot0Configs elevatorPID = new Slot0Configs();
         
@@ -83,8 +86,8 @@ public class Elevator extends SubsystemBase {
         elevatorPID.kD = ElevatorConstants.kD;
         elevatorPID.kG = ElevatorConstants.kG;
 
-        ElevLeft.getConfigurator().apply(config.withSlot0(elevatorPID));
-        ElevRight.getConfigurator().apply(config.withSlot0(elevatorPID));
+        ElevLeft.getConfigurator().apply(configLeft.withSlot0(elevatorPID));
+        ElevRight.getConfigurator().apply(configRight.withSlot0(elevatorPID));
         
 
         // Register this subsystem in Shuffleboard for AdvantageScope to see Sendable properties

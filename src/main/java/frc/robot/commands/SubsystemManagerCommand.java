@@ -46,38 +46,6 @@ public class SubsystemManagerCommand extends Command{
     private final ManualControls controls;
     private final SubsystemManager subsystemManager;
 
-    public enum WantedSuperState {
-        Stow,
-        ScoreL1,
-        ScoreL2,
-        ScoreL3,
-        ScoreL4,
-        RemoveBallL2,
-        RemoveBallL3,
-        ShootBall,
-        StationIntake,
-        GroundCoralIntake,
-        GroundBallIntake
-    }
-
-    public enum CurrentSuperState {
-        Stow,
-        ScoreL1,
-        ScoreL2,
-        ScoreL3,
-        ScoreL4,
-        RemoveBallL2,
-        RemoveBallL3,
-        ShootBall,
-        StationIntake,
-        GroundCoralIntake,
-        GroundBallIntake
-    }
-
-    private WantedSuperState wantedSuperState = WantedSuperState.Stow;
-    private CurrentSuperState currentSuperState = CurrentSuperState.Stow;
-    private CurrentSuperState previousSuperState;
-
 
     public SubsystemManagerCommand(
         SwerveSubsystem swerve,
@@ -100,25 +68,59 @@ public class SubsystemManagerCommand extends Command{
 
     public void initialize() {
         ballGrabber.stop();
-        arm.setArmGoal(Constants.ArmConstants.REEF_POSITION_DEG_high);
-        elevator.setGoal(Constants.ElevatorConstants.SHOOTBALL);
     }
 
     public void execute() {
+
         if (controls.goToStow()) {
-            subsystemManager.stow();
+
+            elevator.setWantedState(Elevator.WantedState.Stow);
+            elevator.setGoal(ElevatorConstants.STOW);
+
+            arm.setArmGoal(ArmConstants.STOW_POSITION_DEG);
+        
+            ballGrabber.stop();
+
         } else if (controls.goToL2Ball()) {
-            subsystemManager.removeBallL2();
+
+            elevator.setWantedState(Elevator.WantedState.L2Ball);
+            elevator.setGoal(ElevatorConstants.L2BALL);
+
+            arm.setArmGoal(ArmConstants.REEF_POSITION_DEG_low);
+        
+            ballGrabber.runIntakeOuttake();
+
         } else if (controls.goToL3Ball()) {
-            subsystemManager.removeBallL3();
+
+            elevator.setWantedState(Elevator.WantedState.L3Ball);
+            elevator.setGoal(ElevatorConstants.L3BALL);
+
+            arm.setArmGoal(ArmConstants.REEF_POSITION_DEG_high);
+        
+            ballGrabber.runIntakeOuttake();
+
         } else if (controls.goToShootBall()) {
-            subsystemManager.shootBall();
+
+            elevator.setWantedState(Elevator.WantedState.ShootBall);
+            elevator.setGoal(ElevatorConstants.SHOOTBALL);
+
+            arm.setArmGoal(ArmConstants.BARGE);
+
         } else if (controls.goToGroundBall()) {
-            subsystemManager.groundBallIntake();
+
+            if (ballGrabber.hasBall()) {
+                arm.setArmGoal(ArmConstants.STOW_POSITION_DEG);
+            } else {
+                arm.setArmGoal(ArmConstants.GPICKUP_POSITION_DEG); //Should hopefully work, updated
+            }
+    
+            elevator.setWantedState(Elevator.WantedState.Stow);
+            elevator.setGoal(ElevatorConstants.STOW);
+            ballGrabber.runIntakeOuttake();
         }
 
-        if (ballGrabber.hasBall()) {
-            subsystemManager.groundBallIntake();
-        }
+        // if (ballGrabber.hasBall()) {
+        //     subsystemManager.groundBallIntake();
+        // }
     }
 }
