@@ -105,5 +105,9 @@ public class SubsystemManagerCommand {
         } else if (controls.goToGroundBall()) {
             subsystemManager.groundBallIntake();
         }
+
+        if (ballGrabber.hasBall()) {
+            subsystemManager.groundBallIntake();
+        }
     }
 }

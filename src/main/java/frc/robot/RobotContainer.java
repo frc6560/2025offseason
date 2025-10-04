@@ -12,6 +12,11 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.subsystems.BallGrabber;
+import frc.robot.commands.BallGrabberCommand;
+import java.io.File;
+import swervelib.SwerveInputStream;
+import frc.robot.subsystems.swervedrive.*;
 
 public class RobotContainer {
 
@@ -20,17 +25,27 @@ public class RobotContainer {
     private final XboxController firstXbox = new XboxController(0);
     private final XboxController secondXbox = new XboxController(1);
     private final ManualControls controls = new ManualControls(firstXbox, secondXbox);
-    private final Arm arm = new Arm();
+    
 
     // Subsystems
     private final Elevator elevator = new Elevator();
+    private final Arm arm = new Arm();
+    private final BallGrabber ballGrabber = new BallGrabber();
+    private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve/falcon"));
+
+    
 
     public RobotContainer() {
       arm.setDefaultCommand(new ArmCommand(arm, controls));
 
+      
       configureBindings();
       // Default elevator command
       elevator.setDefaultCommand(new ElevatorCommand(elevator,controls));
+        
+      ballGrabber.setDefaultCommand(new BallGrabberCommand(ballGrabber, controls));
+      
+
     }
 
     private void configureBindings() {

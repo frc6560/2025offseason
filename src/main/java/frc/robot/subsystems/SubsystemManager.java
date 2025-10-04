@@ -84,82 +84,9 @@ public class SubsystemManager extends SubsystemBase {
         this.ballGrabber = ballGrabber;
     }
 
-    public void periodic() {
-        currentSuperState = handStateTransitions();
-        applyStates();
-    }
-
-    private CurrentSuperState handStateTransitions() {
-        previousSuperState = currentSuperState;
-        switch (wantedSuperState) {
-            default:
-                currentSuperState = CurrentSuperState.Stow;
-                break;
-            case ScoreL1:
-                currentSuperState = CurrentSuperState.ScoreL1;
-                break;
-            case ScoreL2:
-                currentSuperState = CurrentSuperState.ScoreL2;
-                break;
-            case RemoveBallL2:
-                currentSuperState = CurrentSuperState.RemoveBallL2;
-                break;
-            case RemoveBallL3:
-                currentSuperState = CurrentSuperState.RemoveBallL3;
-                break;
-            case ShootBall:
-                currentSuperState = CurrentSuperState.ShootBall;
-                break;
-            case StationIntake:
-                currentSuperState = CurrentSuperState.StationIntake;
-                break;
-            case GroundCoralIntake:
-                currentSuperState = CurrentSuperState.GroundCoralIntake;
-                break;
-            case GroundBallIntake:
-                currentSuperState = CurrentSuperState.GroundBallIntake;
-                break;
-            
-            
-        }
-        return currentSuperState;
-    }
-
-    private void applyStates() {
-        switch (currentSuperState) {
-            case Stow:
-                stow();
-                break;
-            case ScoreL1:
-                scoreL1();
-                break;
-            case ScoreL2:
-                scoreL2();
-                break;
-            case RemoveBallL2:
-                removeBallL2();
-                break;
-            case RemoveBallL3:
-                removeBallL3();
-                break;
-            case ShootBall:
-                shootBall();
-                break;
-            case StationIntake:
-                stationIntake();
-                break;
-            case GroundCoralIntake:
-                groundCoralIntake();
-                break;
-            case GroundBallIntake:
-                groundBallIntake();
-                break;
-        }
-    }
-
     public void stow() {
         elevator.setWantedState(Elevator.WantedState.Stow);
-        elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
+        elevator.setGoal(ElevatorConstants.STOW);
 
         arm.setArmGoal(ArmConstants.STOW_POSITION_DEG);
         
@@ -178,7 +105,7 @@ public class SubsystemManager extends SubsystemBase {
 
     public void removeBallL2() {
         elevator.setWantedState(Elevator.WantedState.L2Ball);
-        elevator.setGoal(ElevatorConstants.ElevState.L2BALL.getValue());
+        elevator.setGoal(ElevatorConstants.L3BALL);
 
         arm.setArmGoal(ArmConstants.REEF_POSITION_DEG_low);
         
@@ -188,7 +115,7 @@ public class SubsystemManager extends SubsystemBase {
 
     public void removeBallL3() {
         elevator.setWantedState(Elevator.WantedState.L3Ball);
-        elevator.setGoal(ElevatorConstants.ElevState.L3BALL.getValue());
+        elevator.setGoal(ElevatorConstants.L3BALL);
 
         arm.setArmGoal(ArmConstants.REEF_POSITION_DEG_high);
         
@@ -198,7 +125,7 @@ public class SubsystemManager extends SubsystemBase {
 
     public void shootBall() {
         elevator.setWantedState(Elevator.WantedState.ShootBall);
-        elevator.setGoal(ElevatorConstants.ElevState.SHOOTBALL.getValue());
+        elevator.setGoal(ElevatorConstants.SHOOTBALL);
 
         arm.setArmGoal(ArmConstants.BARGE);
 
@@ -217,11 +144,11 @@ public class SubsystemManager extends SubsystemBase {
         if (ballGrabber.hasBall()) {
             arm.setArmGoal(ArmConstants.STOW_POSITION_DEG);
         } else {
-            arm.setArmGoal(ArmConstants.GPICKUP_POSITION_DEG); //PLACEHOLDER ARM POSITION, UPDATE ONCE KEVIN FINISH
+            arm.setArmGoal(ArmConstants.GPICKUP_POSITION_DEG); //Should hopefully work, updated
         }
 
         elevator.setWantedState(Elevator.WantedState.Stow);
-        elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
+        elevator.setGoal(ElevatorConstants.STOW);
         ballGrabber.runIntakeOuttake();
     }
 }
