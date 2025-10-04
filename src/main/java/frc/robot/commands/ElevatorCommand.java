@@ -21,10 +21,6 @@ public class ElevatorCommand extends Command {
     @Override
     public void initialize() {
         elevator.stopElev();
-        targetState = WantedState.Stow;
-        elevator.setGoal(ElevatorConstants.ElevState.STOW.getValue());
-        elevator.setSetpoint(new edu.wpi.first.math.trajectory.TrapezoidProfile.State(
-                elevator.getElevatorHeight(), 0)); // Initialize to current position
     }
 
     @Override

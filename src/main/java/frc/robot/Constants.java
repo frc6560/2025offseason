@@ -50,6 +50,7 @@ public final class Constants
     
     public static final int TopLimitSwitchID = 3;
     public static final int BotLimitSwitchID = 4;
+    
 
     public static final double kS = 1;
     public static final double kV = 2;
@@ -59,8 +60,8 @@ public final class Constants
     public static final double kI = 0.2;
     public static final double kD = 0.1;
 
-    public static final double kMaxV = 0.9;
-    public static final double kMaxA = 0.9;
+    public static final double kMaxV = 3;
+    public static final double kMaxA = 3;
 
     public static final double kG = 0.4;
     
@@ -75,6 +76,7 @@ public final class Constants
         
 
           public final double elevatorSetPoint;
+          
           private ElevState(double elevatorSetpoint) {
             this.elevatorSetPoint = elevatorSetpoint;
           }
@@ -93,15 +95,103 @@ public final class Constants
         public static final double NumInPerRot = 13.4962820398;
         public static final double WristHeightOffGround = 17;
         //need to be tested
-        public static final double L1ORSTOW = HeightToRotations(18);
+    
         public static final double L2 = /*5*/ HeightToRotations(32);
         public static final double L3 = /*10*/HeightToRotations(47.625);
         public static final double L4 = /*15*/ HeightToRotations(72);
         public static final double REMOVEBALLL2 = /*4*/ HeightToRotations(32 + 8.125);
         public static final double REMOVEBALLL3 = /*8*/ HeightToRotations(47.625 + 8.125);
         public static final double SHOOTBALL = /*18*/ HeightToRotations(76 + 8.125);
+        public static final double L2BALL= (HeightToRotations(32 + 8.125));
+        public static final double L3BALL= (HeightToRotations(47.625 + 8.125));
+        public static final double STOW =(HeightToRotations(18));
+        public static final double GROUNDBALL= (HeightToRotations(20));
       
     
+  }
+
+  public static final class ArmConstants
+  {
+    /** CAN IDs */
+    public static final int MOTOR_ID = 91;      // TODO: set correct ID
+    public static final int ENCODER_ID = 90;    // TODO: set correct ID
+
+    /** Characterization Gains */
+    public static final double kS = 0.0;
+    public static final double kV = 0.0;
+    public static final double kA = 0.0;
+    public static final double kG = 0.0;
+
+    /** PID Gains */
+    public static final double kP = 0.8;
+    public static final double kI = 0.2;
+    public static final double kD = 0.1;
+
+    /** Motion Constraints */
+    public static final double kMaxV = 4.0; // m/s
+    public static final double kMaxA = 5.0; // m/s^2
+
+    /** Arm PID Gains */
+    public static final double ARM_KP = 0.5;
+    public static final double ARM_KI = 0.01;
+    public static final double ARM_KD = 0.0;
+    public static final double ARM_KS = 0.1;
+    public static final double ARM_KG = 0.0;
+    public static final double ARM_KV = 0.0;
+    public static final double ARM_KA = 0.0;
+
+    /** Arm Geometry */
+    public static final double MOTOR_GEAR_RATIO = 108.0; // Motor reduction ratio
+    public static final double ENCODER_GEAR_RATIO = 81.0; // Encoder reduction ratio
+    public static final double ARM_LENGTH_METERS = 0.5; // TODO: measure (m)
+    public static final double ARM_MASS_KG = 5.0;       // TODO: measure (kg)
+    public static final double MAX_ANGLE_DEG = 121.0;
+    public static final double MIN_ANGLE_DEG = 0.0;
+    
+
+    /** Gravity constant */
+    public static final double GRAVITY = 9.81; // m/s^2
+
+    /** Arm Setpoints (Degrees) */
+    public static final double STOW_POSITION_DEG = 0.0;
+    public static final double PICKUP_POSITION_DEG = -121.0+90.0;
+    public static final double REEF_POSITION_DEG_low = -11; //11.0+90.0;
+    public static final double REEF_POSITION_DEG_high = -11; //11.0+90.0;
+    public static final double BARGE = 0.0; //31.0+90.0;
+    public static final double PROCESSOR_DEG = 0.0;
+    public static final double GPICKUP_POSITION_DEG = -88.0; //PLACEHOLDEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER
+    
+
+    // Absolute encoder setup
+  public static final int ABS_ENCODER_DIO_PORT = 0;   // change to your wiring
+  public static final double ABS_ENCODER_OFFSET_DEG = 0.0; // tune so stow = 0°
+  public static final boolean ABS_ENCODER_REVERSED = false; 
+
+
+    /** Arm Setpoints (Radians) */
+    public static final double STOW_POSITION_RAD = Math.toRadians(STOW_POSITION_DEG);
+    public static final double PICKUP_POSITION_RAD = Math.toRadians(PICKUP_POSITION_DEG);
+    public static final double REEF_POSITION_RAD_high = Math.toRadians(REEF_POSITION_DEG_high);
+    public static final double REEF_POSITION_RAD_low = Math.toRadians(REEF_POSITION_DEG_low);
+
+    /** Arm State Enum */
+    public enum ArmState {
+      STOW(STOW_POSITION_DEG),
+      PICKUP(PICKUP_POSITION_DEG),
+      REEF_high(REEF_POSITION_DEG_high),
+      REEF_low(REEF_POSITION_DEG_low);
+
+      public final double angleDeg;
+
+      ArmState(double angleDeg) {
+        this.angleDeg = angleDeg;
+      }
+    
+
+      public double ArmgetValue() {
+        return angleDeg;
+      }
+    }
   }
 
 }

@@ -74,9 +74,10 @@ public class Elevator extends SubsystemBase {
         // TalonFX motor configuration
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        
+        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         Slot0Configs elevatorPID = new Slot0Configs();
+        
         elevatorPID.kP = ElevatorConstants.kP;
         elevatorPID.kI = ElevatorConstants.kI;
         elevatorPID.kD = ElevatorConstants.kD;
@@ -85,6 +86,7 @@ public class Elevator extends SubsystemBase {
         ElevLeft.getConfigurator().apply(config.withSlot0(elevatorPID));
         ElevRight.getConfigurator().apply(config.withSlot0(elevatorPID));
         
+
         // Register this subsystem in Shuffleboard for AdvantageScope to see Sendable properties
         tab.add(this);
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
