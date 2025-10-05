@@ -77,7 +77,7 @@ public class SubsystemManagerCommand extends Command{
             elevator.setWantedState(Elevator.WantedState.Stow);
             elevator.setGoal(ElevatorConstants.STOW);
 
-            arm.setArmGoal(ArmConstants.STOW_POSITION_DEG);
+            arm.setGoal(ArmConstants.STOW_POSITION_DEG);
         
             ballGrabber.stop();
 
@@ -86,7 +86,7 @@ public class SubsystemManagerCommand extends Command{
             elevator.setWantedState(Elevator.WantedState.L2Ball);
             elevator.setGoal(ElevatorConstants.L2BALL);
 
-            arm.setArmGoal(ArmConstants.REEF_POSITION_DEG_low);
+            arm.setGoal(ArmConstants.REEF_POSITION_DEG_low);
         
             ballGrabber.runIntakeOuttake();
 
@@ -95,7 +95,7 @@ public class SubsystemManagerCommand extends Command{
             elevator.setWantedState(Elevator.WantedState.L3Ball);
             elevator.setGoal(ElevatorConstants.L3BALL);
 
-            arm.setArmGoal(ArmConstants.REEF_POSITION_DEG_high);
+            arm.setGoal(ArmConstants.REEF_POSITION_DEG_high);
         
             ballGrabber.runIntakeOuttake();
 
@@ -104,15 +104,15 @@ public class SubsystemManagerCommand extends Command{
             elevator.setWantedState(Elevator.WantedState.ShootBall);
             elevator.setGoal(ElevatorConstants.SHOOTBALL);
 
-            arm.setArmGoal(ArmConstants.BARGE);
+            arm.setGoal(ArmConstants.BARGE);
 
         } else if (controls.goToGroundBall()) {
 
-            if (ballGrabber.hasBall()) {
-                arm.setArmGoal(ArmConstants.STOW_POSITION_DEG);
-            } else {
-                arm.setArmGoal(ArmConstants.GPICKUP_POSITION_DEG); //Should hopefully work, updated
-            }
+            // if (ballGrabber.hasBall()) {
+            //     arm.setGoal(ArmConstants.STOW_POSITION_DEG);
+            // } else {
+                arm.setGoal(ArmConstants.PICKUP_POSITION_DEG); //Should hopefully work, updated
+            //}
     
             elevator.setWantedState(Elevator.WantedState.Stow);
             elevator.setGoal(ElevatorConstants.STOW);

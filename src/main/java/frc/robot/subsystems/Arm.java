@@ -5,7 +5,6 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -50,7 +49,6 @@ public class Arm extends SubsystemBase {
 
         // Configure TalonFX
         TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
-        talonFXConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // PID and feedforward configuration
         Slot0Configs slot0 = talonFXConfigs.Slot0;
@@ -84,10 +82,10 @@ public class Arm extends SubsystemBase {
      * Set the target angle for the arm using Motion Magic control
      * @param goalDeg Target angle in degrees
      */
-    public void setArmGoal(double goalDeg) {
+    public void setGoal(double goalDeg) {
         // Convert degrees to motor rotations (assuming 81:1 gear ratio)
 
-        goalDeg = Math.max(Math.min(goalDeg, ArmConstants.MAX_ANGLE_DEG), ArmConstants.MIN_ANGLE_DEG);
+        //goalDeg = Math.max(Math.min(goalDeg, ArmConstants.MAX_ANGLE_DEG), ArmConstants.MIN_ANGLE_DEG);
 
         double rotations = (goalDeg / 360.0) * 81;
         
