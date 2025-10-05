@@ -110,9 +110,9 @@ public class SubsystemManager extends SubsystemBase {
     public void groundBallIntake() {
 
         if (ballGrabber.hasBall()) {
-            arm.setArmGoal(ArmConstants.GPICKUP_POSITION_DEG);
+            arm.setArmGoal(ArmConstants.STOW_POSITION_DEG);
         } else {
-            arm.setArmGoal(ArmConstants.GPICKUP_POSITION_DEG); //Should hopefully work, updated
+            arm.setArmGoal(ArmConstants.PICKUP_POSITION_DEG); //Should hopefully work, updated
         }
 
         elevator.setWantedState(Elevator.WantedState.Stow);

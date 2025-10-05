@@ -114,7 +114,7 @@ public final class Constants
   {
     /** CAN IDs */
     public static final int MOTOR_ID = 40;      // TODO: set correct ID
-    // TODO: set correct ID
+    public static final int ENCODER_ID = 0;    // TODO: set correct ID
 
     /** Characterization Gains */
     public static final double kS = 0.0;
@@ -145,21 +145,20 @@ public final class Constants
     public static final double ENCODER_GEAR_RATIO = 81.0; // Encoder reduction ratio
     public static final double ARM_LENGTH_METERS = 0.5; // TODO: measure (m)
     public static final double ARM_MASS_KG = 5.0;       // TODO: measure (kg)
-    public static final double MAX_ANGLE_DEG = 121.0;
-    public static final double MIN_ANGLE_DEG = 0.0;
+    public static final double MAX_ANGLE_DEG = 0.0;
+    public static final double MIN_ANGLE_DEG = -70.0;
     
 
     /** Gravity constant */
     public static final double GRAVITY = 9.81; // m/s^2
 
     /** Arm Setpoints (Degrees) */
-    public static final double STOW_POSITION_DEG = -1.0;
-    public static final double PICKUP_POSITION_DEG = -121.0+90.0;
+    public static final double STOW_POSITION_DEG = 0.0;
+    public static final double PICKUP_POSITION_DEG = -88;
     public static final double REEF_POSITION_DEG_low = -11; //11.0+90.0;
     public static final double REEF_POSITION_DEG_high = -11; //11.0+90.0;
     public static final double BARGE = 0.0; //31.0+90.0;
     public static final double PROCESSOR_DEG = 0.0;
-    public static final double GPICKUP_POSITION_DEG = -88.0; //PLACEHOLDEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER
     
 
     // Absolute encoder setup
@@ -185,11 +184,6 @@ public final class Constants
 
       ArmState(double angleDeg) {
         this.angleDeg = angleDeg;
-      }
-    
-
-      public double ArmgetValue() {
-        return angleDeg;
       }
     }
   }
