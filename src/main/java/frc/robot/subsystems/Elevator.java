@@ -89,11 +89,7 @@ public class Elevator extends SubsystemBase {
 
         // Register this subsystem in Shuffleboard for AdvantageScope to see Sendable properties
         tab.add(this);
-        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        ElevRight.getConfigurator().apply(config);
-        if (RobotBase.isSimulation()) {
-            startTime = Timer.getFPGATimestamp();
-        }
+
     }
 
     @Override

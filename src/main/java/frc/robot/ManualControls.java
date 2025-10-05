@@ -55,6 +55,10 @@ public class ManualControls {
 
     // elevator
 
+    public boolean goToStow(){
+      return secondXbox.getAButton();
+    }
+    
     public boolean goToL2Ball(){
         return secondXbox.getXButton();
     }
@@ -71,48 +75,22 @@ public class ManualControls {
       return secondXbox.getRightBumperButton();
     }
 
+    public boolean goToGroundBall() {
+      return secondXbox.getBackButton();
+    }
 
-    // wrist
-
-    public boolean goToStow(){
-      return secondXbox.getAButton();
-  }
-
-  public boolean goToPickup(){
-      return secondXbox.getRightTriggerAxis() > 0.25;
-
-  }
-
-  public boolean goToGroundBall() {
-    return secondXbox.getBackButton();
-  }
-
-  public boolean goToReef_low(){
-      return false;
-  }
-
-  public boolean goToReef_high(){
-    return false;
-}
-
-  public boolean goToBarge(){
-      return false;
-  }
-
-  public boolean goToProcessor(){
-      return false;
-  }
 
     // pipe and ball grabber 
 
     // shifted for ball
-    public boolean runGrabberIntakeOuttake(){
+    public boolean runGrabberIntake(){
       return secondXbox.getLeftTriggerAxis() > 0.25;
     }
-    
-    public boolean goToPlacePos() {
-      return secondXbox.getLeftBumperButton();
+
+    public boolean runGrabberOuttake() {
+      return secondXbox.getRightTriggerAxis() > 0.25;
     }
+  
 
 
 

@@ -78,13 +78,12 @@ public class BallGrabber extends SubsystemBase {
         
     }
 
-    public void runIntakeOuttake(){
-    var range = grabberMotorRange.getDistance().getValueAsDouble(); 
-        if(range < BALL_DETECTION_DISTANCE &&grabberMotor.getStatorCurrent().getValueAsDouble() < MAX_CURRENT_RUNNING){
-            grabberMotor.set(OUTTAKE_SPEED);
-        } else{
-            grabberMotor.set(INTAKE_SPEED);
-        }
+    public void runIntake(){
+        grabberMotor.set(INTAKE_SPEED);
+    }
+
+    public void runOuttake(){
+        grabberMotor.set(OUTTAKE_SPEED);
     }
 
 

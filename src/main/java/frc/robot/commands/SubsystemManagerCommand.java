@@ -64,6 +64,7 @@ public class SubsystemManagerCommand extends Command{
 
         addRequirements(subsystemManager);
     }
+    
 
 
     public void initialize() {
@@ -72,55 +73,32 @@ public class SubsystemManagerCommand extends Command{
 
     public void execute() {
 
-        if (controls.goToStow()) {
+        if (controls.goToStow()) { //A
 
-            elevator.setWantedState(Elevator.WantedState.Stow);
-            elevator.setGoal(ElevatorConstants.STOW);
+            subsystemManager.stow();
 
-            arm.setGoal(ArmConstants.STOW_POSITION_DEG);
-        
-            ballGrabber.stop();
+        } else if (controls.goToL2Ball()) { //X
 
-        } else if (controls.goToL2Ball()) {
+            subsystemManager.removeBallL2();
 
-            elevator.setWantedState(Elevator.WantedState.L2Ball);
-            elevator.setGoal(ElevatorConstants.L2BALL);
+        } else if (controls.goToL3Ball()) { //B
 
-            arm.setGoal(ArmConstants.REEF_POSITION_DEG_low);
-        
-            ballGrabber.runIntakeOuttake();
+            subsystemManager.removeBallL3();
 
-        } else if (controls.goToL3Ball()) {
+        } else if (controls.goToShootBall()) { //Y
 
-            elevator.setWantedState(Elevator.WantedState.L3Ball);
-            elevator.setGoal(ElevatorConstants.L3BALL);
+            subsystemManager.shootBall();
 
-            arm.setGoal(ArmConstants.REEF_POSITION_DEG_high);
-        
-            ballGrabber.runIntakeOuttake();
+        } else if (controls.goToGroundBall()) { //Back Button (3 lines)
 
-        } else if (controls.goToShootBall()) {
-
-            elevator.setWantedState(Elevator.WantedState.ShootBall);
-            elevator.setGoal(ElevatorConstants.SHOOTBALL);
-
-            arm.setGoal(ArmConstants.BARGE);
-
-        } else if (controls.goToGroundBall()) {
-
-            // if (ballGrabber.hasBall()) {
-            //     arm.setGoal(ArmConstants.STOW_POSITION_DEG);
-            // } else {
-                arm.setGoal(ArmConstants.PICKUP_POSITION_DEG); //Should hopefully work, updated
-            //}
-    
-            elevator.setWantedState(Elevator.WantedState.Stow);
-            elevator.setGoal(ElevatorConstants.STOW);
-            ballGrabber.runIntakeOuttake();
+            subsystemManager.groundBallIntake();
         }
 
-        // if (ballGrabber.hasBall()) {
-        //     subsystemManager.groundBallIntake();
-        // }
+        if (controls.runGrabberIntake()) { //Left Trigger
+            ballGrabber.runIntake();
+
+        } else if (controls.runGrabberOuttake()) { //Right Trigger
+            ballGrabber.runOuttake();
+        }
     }
 }
