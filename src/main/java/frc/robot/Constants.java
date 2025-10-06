@@ -100,13 +100,13 @@ public final class Constants
         public static final double L2 = 5;///*5*/ HeightToRotations(32);
         public static final double L3 = 10;///*10*/HeightToRotations(47.625);
         public static final double L4 = 15;///*15*/ HeightToRotations(72);
-        public static final double REMOVEBALLL2 = 4;///*4*/ HeightToRotations(32 + 8.125);
-        public static final double REMOVEBALLL3 = 8;///*8*/ HeightToRotations(47.625 + 8.125);
-        public static final double SHOOTBALL = 25;///*18*/ HeightToRotations(76 + 8.125);
-        public static final double L2BALL = 15;//HeightToRotations(32 + 8.125);
-        public static final double L3BALL = 20;//HeightToRotations(47.625 + 8.125);
-        public static final double STOW = 0;//HeightToRotations(18);
-        public static final double GROUNDBALL = 1.5;//HeightToRotations(20);
+        public static final double REMOVEBALLL2 = 3;///*4*/ HeightToRotations(32 + 8.125);
+        public static final double REMOVEBALLL3 = 7;///*8*/ HeightToRotations(47.625 + 8.125);
+        public static final double SHOOTBALL = 14;///*18*/ HeightToRotations(76 + 8.125);
+        public static final double L2BALL = 3;//HeightToRotations(32 + 8.125);
+        public static final double L3BALL = 5;//HeightToRotations(47.625 + 8.125);
+        public static final double STOW = 0.2;//HeightToRotations(18);
+        public static final double GROUNDBALL = 0.2;//HeightToRotations(20);
     
   }
 

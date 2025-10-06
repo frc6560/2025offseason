@@ -42,11 +42,11 @@ public class BallGrabber extends SubsystemBase {
     
 
 
-    private static final double INTAKE_SPEED = -0.3;
+    private static final double INTAKE_SPEED = -0.5;
     private static final double OUTTAKE_SPEED = 0.7; 
 
     private static final double MAX_CURRENT_RUNNING = 30; 
-    private static final double BALL_DETECTION_DISTANCE = 20; //  threshold to detect if a ball is present
+    private static final double BALL_DETECTION_DISTANCE = 0.4; //  threshold to detect if a ball is present
     
 
 
@@ -58,32 +58,25 @@ public class BallGrabber extends SubsystemBase {
     //   private final NetworkTableEntry ntDutyCycle = ntTable.getEntry("Ball Grabber Velocity");
 
     public BallGrabber() {
-        this.grabberMotor = new TalonFX(60, "Canivore"); 
-        this.grabberMotorRange = new CANrange(59, "Canivore"); 
+        this.grabberMotor = new TalonFX(46, "Canivore"); 
+        this.grabberMotorRange = new CANrange(47, "Canivore"); 
 
     }
 
 
     public void periodic(){
-
-        var range = grabberMotorRange.getDistance().getValueAsDouble();
-        
         if (hasBall()) {
-            //trigger arm command!!!!!!!!
-            grabberMotor.set(0.5);
-        }
-        else {
-            stop();
+            System.out.println("Has ball");
         }
         
     }
 
     public void runIntake(){
-        grabberMotor.set(INTAKE_SPEED);
+        grabberMotor.set(-(INTAKE_SPEED));
     }
 
     public void runOuttake(){
-        grabberMotor.set(OUTTAKE_SPEED);
+        grabberMotor.set(-(OUTTAKE_SPEED));
     }
 
 

@@ -68,7 +68,12 @@ public class SubsystemManagerCommand extends Command{
 
 
     public void initialize() {
+        subsystemManager.stow();
         ballGrabber.stop();
+    }
+
+    public void periodic() {
+        
     }
 
     public void execute() {
@@ -90,15 +95,14 @@ public class SubsystemManagerCommand extends Command{
             subsystemManager.shootBall();
 
         } else if (controls.goToGroundBall()) { //Back Button (3 lines)
-
             subsystemManager.groundBallIntake();
+            System.out.println("running Ground Intake");
         }
 
-        if (controls.runGrabberIntake()) { //Left Trigger
-            ballGrabber.runIntake();
-
-        } else if (controls.runGrabberOuttake()) { //Right Trigger
+        if (controls.runGrabber() && ballGrabber.hasBall()) { //Left Trigger
             ballGrabber.runOuttake();
+        } else if (controls.runGrabber() && ballGrabber.hasBall() == false){
+            ballGrabber.runIntake();
         }
     }
 }

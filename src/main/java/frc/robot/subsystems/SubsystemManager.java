@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -159,9 +160,13 @@ public class SubsystemManager extends SubsystemBase {
 
     public void stow() {
         if (previousSuperState != CurrentSuperState.Stow) {
+            
             wantedSuperState = WantedSuperState.Stow;
             elevator.setGoal(ElevatorConstants.STOW);
             arm.setGoal(ArmConstants.STOW_POSITION_DEG);
+        }
+
+        else {
             ballGrabber.stop();
         }
     }
@@ -179,6 +184,7 @@ public class SubsystemManager extends SubsystemBase {
             wantedSuperState = WantedSuperState.RemoveBallL2;
             elevator.setGoal(ElevatorConstants.L2BALL);
             arm.setGoal(ArmConstants.REEF_POSITION_DEG_low);
+            ballGrabber.runIntake();
         }
     }
 
@@ -187,6 +193,7 @@ public class SubsystemManager extends SubsystemBase {
             wantedSuperState = WantedSuperState.RemoveBallL3;
             elevator.setGoal(ElevatorConstants.L3BALL);
             arm.setGoal(ArmConstants.REEF_POSITION_DEG_high);
+            ballGrabber.runIntake();
         }
     }
 
@@ -208,19 +215,23 @@ public class SubsystemManager extends SubsystemBase {
 
     public void groundBallIntake() {
         if (previousSuperState != CurrentSuperState.GroundBallIntake) {
-            //unclear logic, watch out for it.
 
             elevator.setGoal(ElevatorConstants.STOW);
-
+            arm.setGoal(ArmConstants.PICKUP_POSITION_DEG);
+            ballGrabber.runIntake();
+            wantedSuperState = WantedSuperState.GroundBallIntake;
+             
+        } else if (previousSuperState == CurrentSuperState.GroundBallIntake) {
             if (ballGrabber.hasBall()) {
-                ballGrabber.runIntake();
-                arm.setGoal(ArmConstants.STOW_POSITION_DEG);
                 wantedSuperState = WantedSuperState.Stow;
-
+                controller.setRumble(RumbleType.kBothRumble, 0.5);
+                System.out.println("Has ball");
             } else {
                 arm.setGoal(ArmConstants.PICKUP_POSITION_DEG);
                 wantedSuperState = WantedSuperState.GroundBallIntake;
-            } 
+                System.out.println("NO BALL`");
+            }
+            System.out.println("REPEAT");
         }
     }
 }

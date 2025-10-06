@@ -76,20 +76,17 @@ public class ManualControls {
     }
 
     public boolean goToGroundBall() {
-      return secondXbox.getBackButton();
+      return secondXbox.getLeftBumperButton();
     }
 
 
     // pipe and ball grabber 
 
     // shifted for ball
-    public boolean runGrabberIntake(){
+    public boolean runGrabber(){
       return secondXbox.getLeftTriggerAxis() > 0.25;
     }
 
-    public boolean runGrabberOuttake() {
-      return secondXbox.getRightTriggerAxis() > 0.25;
-    }
   
 
 
