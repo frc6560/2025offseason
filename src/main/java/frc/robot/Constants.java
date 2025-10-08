@@ -153,7 +153,7 @@ public final class Constants
     public static final double GRAVITY = 9.81; // m/s^2
 
     /** Arm Setpoints (Degrees) */
-    public static final double STOW_POSITION_DEG = 0.0;
+    public static final double STOW_POSITION_DEG = -11.0;
     public static final double PICKUP_POSITION_DEG = -88;
     public static final double REEF_POSITION_DEG_low = -11; //11.0+90.0;
     public static final double REEF_POSITION_DEG_high = -11; //11.0+90.0;

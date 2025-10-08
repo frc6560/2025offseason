@@ -60,7 +60,7 @@ public class BallGrabber extends SubsystemBase {
     public BallGrabber() {
         this.grabberMotor = new TalonFX(46, "Canivore"); 
         this.grabberMotorRange = new CANrange(47, "Canivore"); 
-
+        
     }
 
 

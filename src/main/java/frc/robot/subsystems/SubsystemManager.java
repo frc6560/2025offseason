@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -32,6 +32,7 @@ import java.util.Optional;
 
 
 
+
 public class SubsystemManager extends SubsystemBase {
     private final SwerveSubsystem swerveSubsystem;
     private final Elevator elevator;
@@ -52,7 +53,8 @@ public class SubsystemManager extends SubsystemBase {
         ShootBall,
         StationIntake,
         GroundCoralIntake,
-        GroundBallIntake
+        GroundBallIntake,
+        GroundBallIntakePreBall
     }
 
     public enum CurrentSuperState {
@@ -66,7 +68,8 @@ public class SubsystemManager extends SubsystemBase {
         ShootBall,
         StationIntake,
         GroundCoralIntake,
-        GroundBallIntake
+        GroundBallIntake,
+        GroundBallIntakePreBall
     }
 
     private WantedSuperState wantedSuperState = WantedSuperState.Stow;
@@ -91,7 +94,7 @@ public class SubsystemManager extends SubsystemBase {
         applyStates();
     }
 
-    private CurrentSuperState handStateTransitions() {
+    public CurrentSuperState handStateTransitions() {
         if (previousSuperState != currentSuperState) {
             switch (wantedSuperState) {
                 default:
@@ -121,12 +124,17 @@ public class SubsystemManager extends SubsystemBase {
                 case GroundBallIntake:
                     currentSuperState = CurrentSuperState.GroundBallIntake;
                     break;
+                case GroundBallIntakePreBall:
+                    currentSuperState = CurrentSuperState.GroundBallIntakePreBall;
+                    break;
             }
+            System.out.println("Changing States");
         }
         return currentSuperState;
+        
     }
 
-    private void applyStates() {
+    public void applyStates() {
         switch (currentSuperState) {
             case Stow:
                 stow();
@@ -154,8 +162,13 @@ public class SubsystemManager extends SubsystemBase {
                 break;
             case GroundBallIntake:
                 groundBallIntake();
+                System.out.println("ground intake");
                 break;
+            case GroundBallIntakePreBall:
+                groundBallIntakePreBall();
+                System.out.println("checking for ball");
         }
+        System.out.println("Changing States");
     }
 
     public void stow() {
@@ -164,10 +177,15 @@ public class SubsystemManager extends SubsystemBase {
             wantedSuperState = WantedSuperState.Stow;
             elevator.setGoal(ElevatorConstants.STOW);
             arm.setGoal(ArmConstants.STOW_POSITION_DEG);
+            ballGrabber.stop();
+        
         }
 
         else {
             ballGrabber.stop();
+            elevator.setGoal(ElevatorConstants.STOW);
+            wantedSuperState = WantedSuperState.Stow;
+        
         }
     }
 
@@ -185,7 +203,9 @@ public class SubsystemManager extends SubsystemBase {
             elevator.setGoal(ElevatorConstants.L2BALL);
             arm.setGoal(ArmConstants.REEF_POSITION_DEG_low);
             ballGrabber.runIntake();
+        
         }
+        elevator.setGoal(ElevatorConstants.L2BALL);
     }
 
     public void removeBallL3() {
@@ -194,15 +214,20 @@ public class SubsystemManager extends SubsystemBase {
             elevator.setGoal(ElevatorConstants.L3BALL);
             arm.setGoal(ArmConstants.REEF_POSITION_DEG_high);
             ballGrabber.runIntake();
+    
         }
+        elevator.setGoal(ElevatorConstants.L3BALL);
     }
 
     public void shootBall() {
+
         if (previousSuperState != CurrentSuperState.ShootBall) {
             wantedSuperState = WantedSuperState.ShootBall;
             elevator.setGoal(ElevatorConstants.SHOOTBALL);
             arm.setGoal(ArmConstants.BARGE);
+            
         }
+        elevator.setGoal(ElevatorConstants.SHOOTBALL);
     }
 
     private void stationIntake() {
@@ -219,19 +244,34 @@ public class SubsystemManager extends SubsystemBase {
             elevator.setGoal(ElevatorConstants.STOW);
             arm.setGoal(ArmConstants.PICKUP_POSITION_DEG);
             ballGrabber.runIntake();
-            wantedSuperState = WantedSuperState.GroundBallIntake;
-             
-        } else if (previousSuperState == CurrentSuperState.GroundBallIntake) {
-            if (ballGrabber.hasBall()) {
-                wantedSuperState = WantedSuperState.Stow;
-                controller.setRumble(RumbleType.kBothRumble, 0.5);
-                System.out.println("Has ball");
-            } else {
-                arm.setGoal(ArmConstants.PICKUP_POSITION_DEG);
-                wantedSuperState = WantedSuperState.GroundBallIntake;
-                System.out.println("NO BALL`");
-            }
-            System.out.println("REPEAT");
+        
+            wantedSuperState = WantedSuperState.GroundBallIntakePreBall;
         }
+    }
+
+    public void groundBallIntakePreBall() {
+        if (ballGrabber.hasBall()) {
+                
+            System.out.println("Hasss ball");
+            ballGrabber.stop();
+            arm.setGoal(ArmConstants.STOW_POSITION_DEG);
+            elevator.setGoal(ElevatorConstants.STOW);
+            
+            previousSuperState = CurrentSuperState.Stow;
+            setWantedState(WantedSuperState.Stow);
+            return;
+            
+        } else {
+            System.out.println("NO BALL`");
+            System.out.println("REPEAT");
+            setWantedState(WantedSuperState.GroundBallIntakePreBall);
+        }
+        
+        return;
+    }
+
+
+    public void setWantedState(WantedSuperState wantedState) {
+        wantedSuperState = wantedState;
     }
 }

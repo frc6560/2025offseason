@@ -33,6 +33,7 @@ import frc.robot.subsystems.BallGrabber;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.SubsystemManager;
+import frc.robot.subsystems.SubsystemManager.WantedSuperState;
 
 import java.util.Optional;
 
@@ -70,31 +71,33 @@ public class SubsystemManagerCommand extends Command{
     public void initialize() {
         subsystemManager.stow();
         ballGrabber.stop();
+        subsystemManager.setWantedState(WantedSuperState.Stow);
     }
 
     public void periodic() {
-        
+    
     }
 
     public void execute() {
 
         if (controls.goToStow()) { //A
-
+            subsystemManager.setWantedState(WantedSuperState.Stow);
             subsystemManager.stow();
 
         } else if (controls.goToL2Ball()) { //X
-
+            subsystemManager.setWantedState(WantedSuperState.RemoveBallL2);
             subsystemManager.removeBallL2();
 
         } else if (controls.goToL3Ball()) { //B
-
+            subsystemManager.setWantedState(WantedSuperState.RemoveBallL3);
             subsystemManager.removeBallL3();
 
         } else if (controls.goToShootBall()) { //Y
-
+            subsystemManager.setWantedState(WantedSuperState.ShootBall);
             subsystemManager.shootBall();
 
         } else if (controls.goToGroundBall()) { //Back Button (3 lines)
+            subsystemManager.setWantedState(WantedSuperState.Stow);
             subsystemManager.groundBallIntake();
             System.out.println("running Ground Intake");
         }
