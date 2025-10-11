@@ -39,6 +39,8 @@ import java.util.Optional;
 
 public class SubsystemManagerCommand extends Command{
 
+    
+
     private final SwerveSubsystem swerveSubsystem;
     private final Elevator elevator;
     private final Arm arm;
@@ -75,7 +77,7 @@ public class SubsystemManagerCommand extends Command{
     }
 
     public void periodic() {
-    
+        
     }
 
     public void execute() {

@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class ManualControls {
@@ -7,6 +8,7 @@ public class ManualControls {
     // private final XboxController secondXbox;
     private final XboxController secondXbox;
     private final XboxController firstXbox;
+
     
     private static double deadband(double value, double deadband) {
         if (Math.abs(value) > deadband) {

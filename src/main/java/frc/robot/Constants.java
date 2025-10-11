@@ -56,9 +56,9 @@ public final class Constants
     public static final double kV = 2;
     public static final double kA = 2;
 
-    public static final double kP = 0.8;
-    public static final double kI = 0.2;
-    public static final double kD = 0.1;
+    public static final double kP = 0.7;
+    public static final double kI = 0.15;
+    public static final double kD = 0.06;
 
     public static final double kMaxV = 3;
     public static final double kMaxA = 3;
@@ -153,7 +153,7 @@ public final class Constants
     public static final double GRAVITY = 9.81; // m/s^2
 
     /** Arm Setpoints (Degrees) */
-    public static final double STOW_POSITION_DEG = -11.0;
+    public static final double STOW_POSITION_DEG = -3.0;
     public static final double PICKUP_POSITION_DEG = -88;
     public static final double REEF_POSITION_DEG_low = -11; //11.0+90.0;
     public static final double REEF_POSITION_DEG_high = -11; //11.0+90.0;
