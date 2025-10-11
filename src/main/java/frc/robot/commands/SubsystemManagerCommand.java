@@ -96,8 +96,8 @@ public class SubsystemManagerCommand extends Command{
             subsystemManager.setWantedState(WantedSuperState.ShootBall);
             subsystemManager.shootBall();
 
-        } else if (controls.goToGroundBall()) { //Back Button (3 lines)
-            subsystemManager.setWantedState(WantedSuperState.Stow);
+        } else if (controls.goToGroundBall()) { //Left Bumper (3 lines)
+            subsystemManager.setWantedState(WantedSuperState.GroundBallIntake);
             subsystemManager.groundBallIntake();
             System.out.println("running Ground Intake");
         }

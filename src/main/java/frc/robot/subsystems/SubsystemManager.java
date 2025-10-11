@@ -46,30 +46,28 @@ public class SubsystemManager extends SubsystemBase {
         Stow,
         ScoreL1,
         ScoreL2,
-        ScoreL3,
-        ScoreL4,
         RemoveBallL2,
         RemoveBallL3,
         ShootBall,
         StationIntake,
         GroundCoralIntake,
         GroundBallIntake,
-        GroundBallIntakePreBall
+        GroundBallIntakePreBall,
+        StowPostBall
     }
 
     public enum CurrentSuperState {
         Stow,
         ScoreL1,
         ScoreL2,
-        ScoreL3,
-        ScoreL4,
         RemoveBallL2,
         RemoveBallL3,
         ShootBall,
         StationIntake,
         GroundCoralIntake,
         GroundBallIntake,
-        GroundBallIntakePreBall
+        GroundBallIntakePreBall,
+        StowPostBall
     }
 
     private WantedSuperState wantedSuperState = WantedSuperState.Stow;
@@ -127,6 +125,8 @@ public class SubsystemManager extends SubsystemBase {
                 case GroundBallIntakePreBall:
                     currentSuperState = CurrentSuperState.GroundBallIntakePreBall;
                     break;
+                case StowPostBall:
+                    currentSuperState = CurrentSuperState.StowPostBall;
             }
             System.out.println("Changing States");
         }
@@ -167,6 +167,10 @@ public class SubsystemManager extends SubsystemBase {
             case GroundBallIntakePreBall:
                 groundBallIntakePreBall();
                 System.out.println("checking for ball");
+            case StowPostBall:
+                stowPostBall();
+                System.out.println("ball found, stowing");
+
         }
         System.out.println("Changing States");
     }
@@ -178,19 +182,21 @@ public class SubsystemManager extends SubsystemBase {
             elevator.setGoal(ElevatorConstants.STOW);
             arm.setGoal(ArmConstants.STOW_POSITION_DEG);
             ballGrabber.stop();
+            System.out.println("stowing first time");
         
         }
 
         else {
             ballGrabber.stop();
             elevator.setGoal(ElevatorConstants.STOW);
+            arm.setGoal(ArmConstants.STOW_POSITION_DEG);
             wantedSuperState = WantedSuperState.Stow;
         
         }
     }
 
     private void scoreL1() {
-/* */
+
     }
 
     private void scoreL2() {
@@ -251,15 +257,8 @@ public class SubsystemManager extends SubsystemBase {
 
     public void groundBallIntakePreBall() {
         if (ballGrabber.hasBall()) {
-                
             System.out.println("Hasss ball");
-            ballGrabber.stop();
-            arm.setGoal(ArmConstants.STOW_POSITION_DEG);
-            elevator.setGoal(ElevatorConstants.STOW);
-            
-            previousSuperState = CurrentSuperState.Stow;
-            setWantedState(WantedSuperState.Stow);
-            return;
+            setWantedState(WantedSuperState.StowPostBall);
             
         } else {
             System.out.println("NO BALL`");
@@ -268,6 +267,13 @@ public class SubsystemManager extends SubsystemBase {
         }
         
         return;
+    }
+
+    public void stowPostBall() {
+        if (previousSuperState != CurrentSuperState.StowPostBall) {
+            setWantedState(WantedSuperState.Stow);
+            stow();
+        }
     }
 
 
