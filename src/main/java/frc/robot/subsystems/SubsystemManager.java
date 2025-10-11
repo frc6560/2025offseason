@@ -53,7 +53,9 @@ public class SubsystemManager extends SubsystemBase {
         GroundCoralIntake,
         GroundBallIntake,
         GroundBallIntakePreBall,
-        StowPostBall
+        StowPostBall,
+        RemoveBallL2PreBall,
+        RemoveBallL3PreBall,
     }
 
     public enum CurrentSuperState {
@@ -67,7 +69,9 @@ public class SubsystemManager extends SubsystemBase {
         GroundCoralIntake,
         GroundBallIntake,
         GroundBallIntakePreBall,
-        StowPostBall
+        StowPostBall,
+        RemoveBallL2PreBall,
+        RemoveBallL3PreBall,
     }
 
     private WantedSuperState wantedSuperState = WantedSuperState.Stow;
@@ -127,6 +131,10 @@ public class SubsystemManager extends SubsystemBase {
                     break;
                 case StowPostBall:
                     currentSuperState = CurrentSuperState.StowPostBall;
+                case RemoveBallL2PreBall:
+                    currentSuperState = CurrentSuperState.RemoveBallL2PreBall;
+                case RemoveBallL3PreBall:
+                    currentSuperState = CurrentSuperState.RemoveBallL3PreBall;
             }
             System.out.println("Changing States");
         }
@@ -166,10 +174,16 @@ public class SubsystemManager extends SubsystemBase {
                 break;
             case GroundBallIntakePreBall:
                 groundBallIntakePreBall();
-                System.out.println("checking for ball");
+                System.out.println("checking for ball ground");
             case StowPostBall:
                 stowPostBall();
                 System.out.println("ball found, stowing");
+            case RemoveBallL2PreBall:
+                removeBallL2PreBall();
+                System.out.println("checking for ball L2");
+            case RemoveBallL3PreBall:
+                removeBallL3PreBall();
+                System.out.println("checking for ball L3");
 
         }
         System.out.println("Changing States");
@@ -209,9 +223,20 @@ public class SubsystemManager extends SubsystemBase {
             elevator.setGoal(ElevatorConstants.L2BALL);
             arm.setGoal(ArmConstants.REEF_POSITION_DEG_low);
             ballGrabber.runIntake();
-        
         }
-        elevator.setGoal(ElevatorConstants.L2BALL);
+    }
+
+    public void removeBallL2PreBall() {
+        if (ballGrabber.hasBall()) {
+            System.out.println("Has L2 ball");
+            setWantedState(WantedSuperState.StowPostBall);
+            
+        } else {
+            System.out.println("NO BALL`");
+            System.out.println("REPEAT");
+            setWantedState(WantedSuperState.RemoveBallL2PreBall);
+        }
+        
     }
 
     public void removeBallL3() {
@@ -220,9 +245,18 @@ public class SubsystemManager extends SubsystemBase {
             elevator.setGoal(ElevatorConstants.L3BALL);
             arm.setGoal(ArmConstants.REEF_POSITION_DEG_high);
             ballGrabber.runIntake();
-    
         }
-        elevator.setGoal(ElevatorConstants.L3BALL);
+    }
+    
+    public void removeBallL3PreBall() {
+        if (ballGrabber.hasBall()) {
+            System.out.println("Has L3 ball");
+            setWantedState(WantedSuperState.StowPostBall);
+        } else {
+            System.out.println("NO BALL`");
+            System.out.println("REPEAT");
+            setWantedState(WantedSuperState.RemoveBallL3PreBall);
+        }
     }
 
     public void shootBall() {
@@ -230,10 +264,8 @@ public class SubsystemManager extends SubsystemBase {
         if (previousSuperState != CurrentSuperState.ShootBall) {
             wantedSuperState = WantedSuperState.ShootBall;
             elevator.setGoal(ElevatorConstants.SHOOTBALL);
-            arm.setGoal(ArmConstants.BARGE);
-            
+            arm.setGoal(ArmConstants.BARGE);   
         }
-        elevator.setGoal(ElevatorConstants.SHOOTBALL);
     }
 
     private void stationIntake() {
@@ -257,7 +289,7 @@ public class SubsystemManager extends SubsystemBase {
 
     public void groundBallIntakePreBall() {
         if (ballGrabber.hasBall()) {
-            System.out.println("Hasss ball");
+            System.out.println("Has Ground ball");
             setWantedState(WantedSuperState.StowPostBall);
             
         } else {
@@ -266,7 +298,6 @@ public class SubsystemManager extends SubsystemBase {
             setWantedState(WantedSuperState.GroundBallIntakePreBall);
         }
         
-        return;
     }
 
     public void stowPostBall() {
