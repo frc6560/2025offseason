@@ -123,8 +123,8 @@ public final class Constants
     public static final double kG = 0.0;
 
     /** PID Gains */
-    public static final double kP = 0.8;
-    public static final double kI = 0.2;
+    public static final double kP = 0.7;
+    public static final double kI = 0.15;
     public static final double kD = 0.1;
 
     /** Motion Constraints */
