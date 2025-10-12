@@ -17,7 +17,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.Utility.AutoAlignPath;
-import frc.robot.Utility.Setpoint;
+import frc.robot.Setpoint;
 import frc.robot.Utility.Enums.DereefIndex;
 
 import frc.robot.Utility.Enums.*;
@@ -178,9 +178,9 @@ public class AlgaeDescoreCommand extends SequentialCommandGroup {
     /** Actuates superstructure to our desired level for algae collection */
     public Command getActuateCommand(){
         return new ParallelCommandGroup(
-            new RunCommand(() -> elevator.setElevatorPosition(elevatorTarget), elevator)
+            new RunCommand(() -> elevator.setGoal(elevatorTarget), elevator)
                 .until(() -> Math.abs(elevator.getElevatorHeight() - elevatorTarget) < ElevatorConstants.kElevatorTolerance),
-            new RunCommand(() -> wrist.setMotorPosition(wristTarget), wrist)
+            new RunCommand(() -> arm.setGoal(wristTarget), arm)
                 .until(() -> Math.abs(elevator.getElevatorHeight() - elevatorTarget) < ElevatorConstants.kElevatorTolerance)
         );
     }
@@ -201,15 +201,15 @@ public class AlgaeDescoreCommand extends SequentialCommandGroup {
             },
             () -> { 
                 // Retract superstructure to stow position
-                wrist.setMotorPosition(WristConstants.WristStates.S_L2);
-                elevator.setElevatorPosition(ElevatorConstants.ElevatorStates.STOW);
+                arm.setGoal(ArmConstants.STOW_POSITION_DEG);
+                elevator.setGoal(ElevatorConstants.STOW);
             },
             (interrupted) -> {
                 // Ensure grabber is stopped if interrupted
                 grabber.stop();
             },
-            () -> (Math.abs(elevator.getElevatorHeight() - ElevatorConstants.ElevatorStates.STOW) < ElevatorConstants.kElevatorTolerance
-                  && Math.abs(wrist.getWristPosition() - WristConstants.WristStates.S_L2) < 5.0)
+            () -> (Math.abs(elevator.getElevatorHeight() - ElevatorConstants.STOW) < ElevatorConstants.kElevatorTolerance
+                  && Math.abs(arm.getArmAngleDeg() - ArmConstants.STOW_POSITION_DEG) < 5.0)
         );
         final Command backUp = getFollowPath(path, 0);
         return Commands.sequence(backUp, deactuateSuperstructure).withTimeout(3);
@@ -267,8 +267,8 @@ public class AlgaeDescoreCommand extends SequentialCommandGroup {
                 wristTarget = FieldConstants.Wrist_top_algae;
                 break;
             default:
-                elevatorTarget = ElevatorConstants.ElevatorStates.STOW;
-                wristTarget = WristConstants.WristStates.STOW;
+                elevatorTarget = ElevatorConstants.STOW;
+                wristTarget = ArmConstants.STOW_POSITION_DEG;
         }
     }
 

@@ -19,6 +19,10 @@ import swervelib.SwerveInputStream;
 import frc.robot.subsystems.swervedrive.*;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.commands.SubsystemManagerCommand;
+import java.util.Set;
+import frc.robot.commands.AlgaeDescoreCommand;
+import frc.robot.Utility.Enums.ReefLevel;
+import frc.robot.Utility.Enums.DereefIndex;
 
 public class RobotContainer {
 
@@ -35,7 +39,7 @@ public class RobotContainer {
     private final BallGrabber ballGrabber = new BallGrabber();
     private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve/falcon"));
     private final SubsystemManager subsystemManager = new SubsystemManager(drivebase, elevator, arm, ballGrabber);
-
+    
     
 
     public RobotContainer() {
@@ -50,6 +54,12 @@ public class RobotContainer {
 
       subsystemManager.setDefaultCommand(new SubsystemManagerCommand(drivebase, elevator, arm, ballGrabber, controls, subsystemManager));
       
+      driverXbox.x().onTrue(Commands.defer(() -> new AlgaeDescoreCommand(arm, elevator, ballGrabber, drivebase,
+      DereefIndex.TOP_LEFT, 
+      ReefLevel.HIGH_BALL), 
+      Set.of(arm, elevator, ballGrabber, drivebase))
+      );
+ 
 
     }
 
@@ -61,4 +71,5 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return null; // Replace with your auto
     }
+    
 }
