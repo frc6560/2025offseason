@@ -58,7 +58,7 @@ public class ManualControls {
     // elevator
 
     public boolean goToStow(){
-      return secondXbox.getAButton();
+      return secondXbox.getPOV() == 180;
     }
     
     public boolean goToL2Ball(){
@@ -78,15 +78,19 @@ public class ManualControls {
     }
 
     public boolean goToGroundBall() {
-      return secondXbox.getLeftBumperButton();
+      return secondXbox.getAButton();
     }
 
 
     // pipe and ball grabber 
 
     // shifted for ball
-    public boolean runGrabber(){
-      return secondXbox.getLeftTriggerAxis() > 0.25;
+    public boolean runIntake(){
+      return secondXbox.getLeftBumperButton();
+    }
+
+    public boolean runOuttake() {
+      return secondXbox.getRightBumperButton();
     }
 
   

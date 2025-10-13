@@ -55,6 +55,7 @@ public class SubsystemManager extends SubsystemBase {
         StowPostBall,
         RemoveBallL2PreBall,
         RemoveBallL3PreBall,
+        Idle
     }
 
     public enum CurrentSuperState {
@@ -71,6 +72,7 @@ public class SubsystemManager extends SubsystemBase {
         StowPostBall,
         RemoveBallL2PreBall,
         RemoveBallL3PreBall,
+        Idle
     }
 
     private WantedSuperState wantedSuperState = WantedSuperState.Stow;
@@ -140,6 +142,10 @@ public class SubsystemManager extends SubsystemBase {
                 case RemoveBallL3PreBall:
                     currentSuperState = CurrentSuperState.RemoveBallL3PreBall;
                     break;
+                case Idle:
+                    currentSuperState = CurrentSuperState.Idle;
+                    break;
+
             }
             System.out.println("Changing States");
         }
@@ -193,6 +199,9 @@ public class SubsystemManager extends SubsystemBase {
                 removeBallL3PreBall();
                 System.out.println("checking for ball L3");
                 break;
+            case Idle:
+                idle();
+                break;
 
         }
         System.out.println("Changing States");
@@ -241,11 +250,15 @@ public class SubsystemManager extends SubsystemBase {
             System.out.println("Has L2 ball");
             arm.setGoal(ArmConstants.STOW_POSITION_DEG);
             ballGrabber.stop();
+            setWantedState(WantedSuperState.Idle);
 
         } else {
             elevator.setGoal(ElevatorConstants.L2BALL);
+            ballGrabber.runIntake();
+            arm.setGoal(ArmConstants.REEF_POSITION_DEG_low);
             System.out.println("NO BALL");
             System.out.println("REPEAT");
+            setWantedState(WantedSuperState.RemoveBallL2PreBall);
         }
         
     }
@@ -255,7 +268,7 @@ public class SubsystemManager extends SubsystemBase {
             elevator.setGoal(ElevatorConstants.L3BALL);
             arm.setGoal(ArmConstants.REEF_POSITION_DEG_high);
             ballGrabber.runIntake();
-            removeBallL3PreBall();
+            setWantedState(WantedSuperState.RemoveBallL3PreBall);
         }
     }
     
@@ -264,11 +277,15 @@ public class SubsystemManager extends SubsystemBase {
             System.out.println("Has L3 ball");
             arm.setGoal(ArmConstants.STOW_POSITION_DEG);
             ballGrabber.stop();
+            setWantedState(WantedSuperState.Idle);
 
         } else {
+            ballGrabber.runIntake();
+            arm.setGoal(ArmConstants.REEF_POSITION_DEG_low);
             elevator.setGoal(ElevatorConstants.L3BALL);
             System.out.println("NO BALL");
             System.out.println("REPEAT");
+            
         }
     }
 
@@ -293,25 +310,27 @@ public class SubsystemManager extends SubsystemBase {
 
     public void groundBallIntake() {
         if (previousSuperState != CurrentSuperState.GroundBallIntake) {
-
             elevator.setGoal(ElevatorConstants.STOW);
             arm.setGoal(ArmConstants.PICKUP_POSITION_DEG);
             ballGrabber.runIntake();
             setWantedState(WantedSuperState.GroundBallIntakePreBall);
         }
     }
-
+    
     public void groundBallIntakePreBall() {
         if (ballGrabber.hasBall()) {
-            System.out.println("Has Ground ball");
+            System.out.println("Has L3 ball");
+            arm.setGoal(ArmConstants.STOW_POSITION_DEG);
+            ballGrabber.stop();
             setWantedState(WantedSuperState.StowPostBall);
-            
+
         } else {
+            ballGrabber.runIntake();
+            arm.setGoal(ArmConstants.PICKUP_POSITION_DEG);
+            elevator.setGoal(ElevatorConstants.STOW);
             System.out.println("NO BALL");
             System.out.println("REPEAT");
-            elevator.setGoal(ElevatorConstants.STOW);
-            arm.setGoal(ArmConstants.PICKUP_POSITION_DEG);
-            ballGrabber.runIntake();
+            
         }
     }
 
@@ -324,5 +343,9 @@ public class SubsystemManager extends SubsystemBase {
 
     public void setWantedState(WantedSuperState wantedState) {
         wantedSuperState = wantedState;
+    }
+
+    public void idle() {
+
     }
 }

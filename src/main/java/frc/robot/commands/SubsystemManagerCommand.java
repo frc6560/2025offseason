@@ -104,9 +104,9 @@ public class SubsystemManagerCommand extends Command{
             System.out.println("running Ground Intake");
         }
 
-        if (controls.runGrabber() && ballGrabber.hasBall()) { //Left Trigger
+        if (controls.runOuttake() ) { //Left Trigger
             ballGrabber.runOuttake();
-        } else if (controls.runGrabber() && ballGrabber.hasBall() == false){
+        } else if (controls.runIntake()){
             ballGrabber.runIntake();
         }
     }
