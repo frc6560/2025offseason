@@ -9,16 +9,23 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.SubsystemManager;
+
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.GroundIntake;
 import frc.robot.subsystems.BallGrabber;
 import frc.robot.commands.BallGrabberCommand;
 import java.io.File;
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.swervedrive.*;
-import frc.robot.subsystems.SubsystemManager;
-import frc.robot.commands.SubsystemManagerCommand;
+
+import frc.robot.commands.GroundIntake;
+import frc.robot.commands.GroundIntakePostBall;
+import frc.robot.commands.L2Ball;
+import frc.robot.commands.L2BallPostBall;
+import frc.robot.commands.L3Ball;
+import frc.robot.commands.L3BallPostBall;
+import frc.robot.commands.ShootBall;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -59,7 +66,6 @@ public class RobotContainer {
     private final Arm arm = new Arm();
     private final BallGrabber ballGrabber = new BallGrabber();
     //private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve/falcon"));
-    private final SubsystemManager subsystemManager = new SubsystemManager(drivebase, elevator, arm, ballGrabber, controls);
 
     /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -128,13 +134,13 @@ SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.co
       // Default elevator command
 
       DriverStation.silenceJoystickConnectionWarning(true);
-    NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+      NamedCommands.registerCommand("test", Commands.print("I EXIST"));
 
       elevator.setDefaultCommand(new ElevatorCommand(elevator,controls));
         
       ballGrabber.setDefaultCommand(new BallGrabberCommand(ballGrabber, controls));
 
-      subsystemManager.setDefaultCommand(new SubsystemManagerCommand(drivebase, elevator, arm, ballGrabber, controls, subsystemManager));
+
       
 
     }
@@ -207,6 +213,14 @@ SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.co
           driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
           driverXbox.rightBumper().onTrue(Commands.none());
         }
+
+
+
+
+
+
+
+        secondXbox.a().onTrue(Commands.defer(() -> new GroundIntake(elevator, arm, ballGrabber)));
     
     }
 
