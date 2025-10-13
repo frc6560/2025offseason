@@ -16,15 +16,17 @@ import frc.robot.commands.GroundIntake;
 import frc.robot.subsystems.BallGrabber;
 import frc.robot.commands.BallGrabberCommand;
 import java.io.File;
+import java.util.Set;
+
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.swervedrive.*;
 
 import frc.robot.commands.GroundIntake;
-import frc.robot.commands.GroundIntakePostBall;
+//import frc.robot.commands.GroundIntakePostBall;
 import frc.robot.commands.L2Ball;
-import frc.robot.commands.L2BallPostBall;
+//import frc.robot.commands.L2BallPostBall;
 import frc.robot.commands.L3Ball;
-import frc.robot.commands.L3BallPostBall;
+//import frc.robot.commands.L3BallPostBall;
 import frc.robot.commands.ShootBall;
 
 import com.pathplanner.lib.auto.NamedCommands;
@@ -212,6 +214,8 @@ SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.co
           driverXbox.back().whileTrue(Commands.none());
           driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
           driverXbox.rightBumper().onTrue(Commands.none());
+          driverXbox.y().onTrue(Commands.defer(() -> new GroundIntake(elevator, arm, ballGrabber), Set.of(elevator, arm, ballGrabber)));
+ 
         }
 
 
@@ -220,7 +224,7 @@ SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.co
 
 
 
-        secondXbox.a().onTrue(Commands.defer(() -> new GroundIntake(elevator, arm, ballGrabber)));
+        
     
     }
 
