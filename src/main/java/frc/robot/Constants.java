@@ -30,9 +30,35 @@ public final class Constants
 
   public static final class DrivebaseConstants
   {
-
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
+
+    // Max velocities and accelerations for auto
+    public static final double kMaxAutoVelocity = 5.0; 
+    public static final double kMaxAutoAcceleration = 3.7; 
+
+    // Max velocities and accelerations for teleop alignment
+    public static final double kMaxAlignmentVelocity = 2.1;  
+    public static final double kMaxAlignmentAcceleration = 1.3; // formerly 1.8
+    public static final double kMaxOmega = Math.toRadians(270);
+    public static final double kMaxAlpha = Math.toRadians(360);
+
+    // Tunable constants
+    public static final double kS = 0.185;
+    public static final double kV = 1.866;
+    public static final double kA = 0.159;
+
+    public static final double kP_translation = 2.0;  
+    public static final double kI_translation = 0; 
+    public static final double kD_translation = 0.15; 
+
+    public static final double kP_rotation = 3.0;
+    public static final double kI_rotation = 0;
+    public static final double kD_rotation = 0.15;
+
+    public static final double kStdvX = 0.08;
+    public static final double kStdvY = 0.08;
+    public static final double kStdvTheta = 999999;
   }
 
   public static class OperatorConstants
@@ -67,6 +93,7 @@ public final class Constants
     public static final double kMaxA = 35;
 
     public static final double kG = 0.4;
+    public static final double kElevatorTolerance = 1.0;
     
       
         

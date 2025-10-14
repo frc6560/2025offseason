@@ -17,10 +17,10 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.utility.AutoAlignPath;
-import frc.robot.utility.Setpoint;
-import frc.robot.Utility.Enums.DereefIndex;
+import frc.robot.utility.enums.Setpoint;
 
-import frc.robot.Utility.Enums.*;
+
+import frc.robot.utility.enums.*;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
