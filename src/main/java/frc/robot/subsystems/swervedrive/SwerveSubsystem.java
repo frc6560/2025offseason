@@ -17,25 +17,37 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+import frc.robot.utility.LimelightHelpers;
+import frc.robot.utility.LimelightHelpers.PoseEstimate;
+import frc.robot.utility.enums.Setpoint;
+
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.swervedrive.Vision.Cameras;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -52,28 +64,42 @@ import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+import edu.wpi.first.math.Matrix;
+
 
 public class SwerveSubsystem extends SubsystemBase
 {
 
-  /**
-   * Swerve drive object.
-   */
   private final SwerveDrive swerveDrive;
-  /**
-   * Enable vision odometry updates while driving.
-   */
-  private final boolean     visionDriveTest = false;
-  /**
-   * PhotonVision class to keep an accurate odometry.
-   */
-  private       Vision      vision;
+  private Vision vision;
 
-  /**
-   * Initialize {@link SwerveDrive} with the directory provided.
-   *
-   * @param directory Directory of swerve drive config files.
-   */
+  private ArrayList<Pose2d> targetPose2dsLeft = new ArrayList<Pose2d>();
+  private ArrayList<Pose2d> targetPose2dsRight = new ArrayList<Pose2d>();
+
+  private final boolean visionDriveTest = true;
+
+  
+  // Values to tune 
+
+  private final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(DrivebaseConstants.kS, 
+                                                                            DrivebaseConstants.kV, 
+                                                                            DrivebaseConstants.kA);
+
+  Matrix<N3, N1> visionStdDevs = VecBuilder.fill(DrivebaseConstants.kStdvX,
+                                                 DrivebaseConstants.kStdvY, 
+                                                 DrivebaseConstants.kStdvTheta);
+
+  private final PIDController m_pidControllerX = new PIDController(DrivebaseConstants.kP_translation, 
+                                                            DrivebaseConstants.kI_translation, 
+                                                            DrivebaseConstants.kD_translation);
+  private final PIDController m_pidControllerY = new PIDController(DrivebaseConstants.kP_translation,
+                                                            DrivebaseConstants.kI_translation, 
+                                                            DrivebaseConstants.kD_translation);
+  private final PIDController m_pidControllerTheta = new PIDController(DrivebaseConstants.kP_rotation, 
+                                                                DrivebaseConstants.kI_rotation, 
+                                                                DrivebaseConstants.kD_rotation);
+
+
   public SwerveSubsystem(File directory)
   {
     boolean blueAlliance = false;
@@ -110,6 +136,7 @@ public class SwerveSubsystem extends SubsystemBase
     }
     setupPathPlanner();
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyroWithAlliance));
+    swerveDrive.setVisionMeasurementStdDevs(visionStdDevs);
   }
 
   /**
@@ -138,13 +165,33 @@ public class SwerveSubsystem extends SubsystemBase
   @Override
   public void periodic()
   {
-    // When vision is enabled we must manually update odometry in SwerveDrive
-    if (visionDriveTest)
-    {
-      swerveDrive.updateOdometry();
-      vision.updatePoseEstimation(swerveDrive);
-    }
+    fuseVisionMeasurements();
+    swerveDrive.field.setRobotPose(this.getPose());
   }
+
+  public void fuseVisionMeasurements(){
+    Pose2d emptyPose = new Pose2d();
+    // This is viewed top down, facing the front of the robot
+    String limelightName = "limelight";
+    
+      LimelightHelpers.SetRobotOrientation(limelightName, swerveDrive.getOdometryHeading().getDegrees(), 0, 0, 0, 0, 0);
+      LimelightHelpers.PoseEstimate limelightPoseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
+
+      if(limelightPoseEstimate == null) return;
+      Pose2d limelightPose = limelightPoseEstimate.pose;
+      if (limelightPose == null || limelightPoseEstimate.tagCount < 1 || limelightPose.equals(emptyPose)) return;
+      double adjustedTime = Timer.getFPGATimestamp() - limelightPoseEstimate.latency / 1000;
+      if(adjustedTime > 0){
+        if(limelightPoseEstimate.tagCount < 2 && limelightPoseEstimate.avgTagDist > 1.8){
+          limelightPose = new Pose2d(
+            limelightPose.getTranslation(),
+            swerveDrive.getOdometryHeading()
+          );
+        }
+        swerveDrive.addVisionMeasurement(limelightPose, adjustedTime);
+      }
+    }
+  
 
   @Override
   public void simulationPeriodic()
@@ -222,11 +269,45 @@ public class SwerveSubsystem extends SubsystemBase
     PathfindingCommand.warmupCommand().schedule();
   }
 
+  public void followSegment(Setpoint setpoint, Pose2d targetPose) {
+    m_pidControllerTheta.enableContinuousInput(-Math.PI, Math.PI);
+    Pose2d pose = getPose();
+    swerveDrive.field.getObject("TargetPose").setPose(targetPose);
+    m_pidControllerTheta.setIZone(0.2);
+    m_pidControllerX.setIZone(0.25);
+    m_pidControllerY.setIZone(0.25);
+
+    ChassisSpeeds targetSpeeds = new ChassisSpeeds( 
+      setpoint.vx + m_pidControllerX.calculate(pose.getX(), setpoint.x), 
+      setpoint.vy + m_pidControllerY.calculate(pose.getY(), setpoint.y),
+      (-1) * (setpoint.omega + m_pidControllerTheta.calculate(pose.getRotation().getRadians(), setpoint.theta))
+    );
+
+    swerveDrive.driveFieldOriented(targetSpeeds);
+  }
+  
+  /** Measured in radians */
+  public void rotateCommand(double target){
+    m_pidControllerTheta.enableContinuousInput(-Math.PI, Math.PI);
+    SmartDashboard.getEntry("pid error").setDouble(m_pidControllerTheta.getError());
+    SmartDashboard.getEntry("pose in radians").setDouble(getPose().getRotation().getRadians());
+    SmartDashboard.getEntry("target pose").setDouble(target);
+    ChassisSpeeds targetSpeeds = new ChassisSpeeds(
+      0,
+      0,
+      (-1) * (m_pidControllerTheta.calculate(getPose().getRotation().getRadians(), target))
+    );
+
+    swerveDrive.driveFieldOriented(targetSpeeds);
+  }
   /**
    * Aim the robot at the target returned by PhotonVision.
    *
    * @return A {@link Command} which will run the alignment.
    */
+
+   
+
   public Command aimAtTarget(Cameras camera)
   {
 
@@ -524,6 +605,19 @@ public class SwerveSubsystem extends SubsystemBase
   public void resetOdometry(Pose2d initialHolonomicPose)
   {
     swerveDrive.resetOdometry(initialHolonomicPose);
+  }
+  
+  public void resetOdometryToLimelight() {
+    Pose2d emptyPose = new Pose2d();
+    PoseEstimate poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-right");
+    if (poseEstimate == null) return;
+    
+    Pose2d pose = poseEstimate.pose;
+
+    if (pose == null || pose.equals(emptyPose)) return;
+
+    resetOdometry(pose);
+    swerveDrive.setGyro(new Rotation3d(0, 0, pose.getRotation().getRadians()));
   }
 
   /**

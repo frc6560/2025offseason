@@ -18,9 +18,8 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.utility.AutoAlignPath;
 import frc.robot.utility.enums.Setpoint;
-
-
-import frc.robot.utility.enums.*;
+import frc.robot.utility.enums.DereefIndex;
+import frc.robot.utility.enums.ReefLevel;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
