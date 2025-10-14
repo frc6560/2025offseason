@@ -97,4 +97,9 @@ public class BallGrabber extends SubsystemBase {
         return grabberMotor.get(); 
     }
 
+    public double getOutputCurrent() {
+        return grabberMotor.getMotorVoltage().getValueAsDouble();
+
+    }
+
 }
