@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import swervelib.math.Matter;
 
 /**
@@ -188,4 +191,49 @@ public final class Constants
     }
   }
 
+  public static final class FieldConstants{
+    // AUTO 
+    // Left and right are viewed from the DS.
+    public static final double RED_X = 10.402;
+    public static final double BLUE_X = 7.164;
+
+    public static final Pose2d FAR_RIGHT = new Pose2d(RED_X, 7.145, Rotation2d.fromDegrees(-180));
+    public static final Pose2d FAR_LEFT = new Pose2d(RED_X, 1.08, Rotation2d.fromDegrees(-180));
+    public static final Pose2d RIGHT = new Pose2d(RED_X, 5.645, Rotation2d.fromDegrees(-180));
+    public static final Pose2d LEFT = new Pose2d(RED_X, 2.636, Rotation2d.fromDegrees(-180));
+    public static final Pose2d CENTER_RED = new Pose2d(RED_X, 4.0, Rotation2d.fromDegrees(-180));
+
+    public static final Pose2d FAR_LEFT_BLUE = new Pose2d(BLUE_X, 6.92, Rotation2d.fromDegrees(0));
+    public static final Pose2d FAR_RIGHT_BLUE = new Pose2d(BLUE_X, 1, Rotation2d.fromDegrees(0));
+    public static final Pose2d LEFT_BLUE = new Pose2d(BLUE_X, 5.645, Rotation2d.fromDegrees(0));
+    public static final Pose2d RIGHT_BLUE = new Pose2d(BLUE_X, 2.636, Rotation2d.fromDegrees(0));
+    public static final Pose2d CENTER_BLUE = new Pose2d(BLUE_X, 4.0, Rotation2d.fromDegrees(0));
+
+    public static final double Elevator_top_algae = 8.15;
+    public static final double Wrist_top_algae = 148.5;
+    public static final double Elevator_low_algae = 1.51;
+    public static final double Wrist_low_algae = 148.5;
+
+    public static Pose2d getFarRight(DriverStation.Alliance alliance){
+      return alliance == DriverStation.Alliance.Red ? FAR_RIGHT : FAR_RIGHT_BLUE;
+    }
+
+    public static Pose2d getFarLeft(DriverStation.Alliance alliance){
+      return alliance == DriverStation.Alliance.Red ? FAR_LEFT : FAR_LEFT_BLUE;
+    }
+
+    public static Pose2d getRight(DriverStation.Alliance alliance){
+      return alliance == DriverStation.Alliance.Red ? RIGHT : RIGHT_BLUE;
+    }
+
+    public static Pose2d getLeft(DriverStation.Alliance alliance){
+      return alliance == DriverStation.Alliance.Red ? LEFT : LEFT_BLUE;
+    }
+
+    public static Pose2d getCenter(DriverStation.Alliance alliance){
+      return alliance == DriverStation.Alliance.Red ? CENTER_RED : CENTER_BLUE;
+    }
+  }
 }
+
+
