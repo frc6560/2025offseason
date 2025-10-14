@@ -147,7 +147,6 @@ public class SubsystemManager extends SubsystemBase {
                     break;
 
             }
-            System.out.println("Changing States");
         }
         return currentSuperState;
         
@@ -204,7 +203,6 @@ public class SubsystemManager extends SubsystemBase {
                 break;
 
         }
-        System.out.println("Changing States");
     }
 
     public void stow() {

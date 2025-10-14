@@ -52,16 +52,16 @@ public final class Constants
     public static final int BotLimitSwitchID = 4;
     
 
-    public static final double kS = 1;
-    public static final double kV = 2;
-    public static final double kA = 2;
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
 
-    public static final double kP = 0.7;
-    public static final double kI = 0.15;
-    public static final double kD = 0.06;
+    public static final double kP = 3.5;
+    public static final double kI = 0.1;
+    public static final double kD = 0.1;
 
-    public static final double kMaxV = 3;
-    public static final double kMaxA = 3;
+    public static final double kMaxV = 35;
+    public static final double kMaxA = 35;
 
     public static final double kG = 0.4;
     
@@ -100,9 +100,9 @@ public final class Constants
         public static final double L2 = 5;///*5*/ HeightToRotations(32);
         public static final double L3 = 10;///*10*/HeightToRotations(47.625);
         public static final double L4 = 15;///*15*/ HeightToRotations(72);
-        public static final double REMOVEBALLL2 = 3;///*4*/ HeightToRotations(32 + 8.125);
-        public static final double REMOVEBALLL3 = 7;///*8*/ HeightToRotations(47.625 + 8.125);
-        public static final double SHOOTBALL = 14;///*18*/ HeightToRotations(76 + 8.125);
+        public static final double REMOVEBALLL2 = 7;///*4*/ HeightToRotations(32 + 8.125);
+        public static final double REMOVEBALLL3 = 13;///*8*/ HeightToRotations(47.625 + 8.125);
+        public static final double SHOOTBALL = 18;///*18*/ HeightToRotations(76 + 8.125);
         public static final double L2BALL = 3;//HeightToRotations(32 + 8.125);
         public static final double L3BALL = 5;//HeightToRotations(47.625 + 8.125);
         public static final double STOW = 0.2;//HeightToRotations(18);
@@ -123,18 +123,18 @@ public final class Constants
     public static final double kG = 0.0;
 
     /** PID Gains */
-    public static final double kP = 0.7;
-    public static final double kI = 0.15;
-    public static final double kD = 0.1;
+    public static final double kP = 4;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
 
     /** Motion Constraints */
-    public static final double kMaxV = 4.0; // m/s
-    public static final double kMaxA = 5.0; // m/s^2
+    public static final double kMaxV = 50.0; // m/s
+    public static final double kMaxA = 50.0; // m/s^2
 
     /** Arm PID Gains */
-    public static final double ARM_KP = 0.5;
-    public static final double ARM_KI = 0.01;
-    public static final double ARM_KD = 0.0;
+    public static final double ARM_KP = 3.5;
+    public static final double ARM_KI = 0.1;
+    public static final double ARM_KD = 0.1;
     public static final double ARM_KS = 0.1;
     public static final double ARM_KG = 0.0;
     public static final double ARM_KV = 0.0;
