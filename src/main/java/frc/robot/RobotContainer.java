@@ -10,11 +10,14 @@ import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SubsystemManager;
+import frc.robot.commands.AlgaeDescoreCommand;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.subsystems.BallGrabber;
 import frc.robot.commands.BallGrabberCommand;
 import java.io.File;
+import java.util.Set;
+
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.swervedrive.*;
 import frc.robot.subsystems.SubsystemManager;
@@ -36,6 +39,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.utility.enums.DereefIndex;
+import frc.robot.utility.enums.ReefLevel;
+
 import java.io.File;
 import swervelib.SwerveInputStream;
 
@@ -202,6 +208,10 @@ SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.co
         {
           driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
           driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+          driverXbox.y().onTrue(Commands.defer(() -> new AlgaeDescoreCommand(arm, elevator, ballGrabber, drivebase,
+      DereefIndex.TOP_LEFT, 
+      ReefLevel.HIGH_BALL), 
+      Set.of(arm, elevator, ballGrabber, drivebase)));
           driverXbox.start().whileTrue(Commands.none());
           driverXbox.back().whileTrue(Commands.none());
           driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
