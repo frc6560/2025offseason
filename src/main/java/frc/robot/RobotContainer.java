@@ -206,13 +206,14 @@ SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.co
           driverXbox.rightBumper().onTrue(Commands.none());
         } else
         {
-          driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+          driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+          driverXbox.a().onTrue((Commands.runOnce(drivebase::resetOdometryToLimelight)));
           driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
           driverXbox.y().onTrue(Commands.defer(() -> new AlgaeDescoreCommand(arm, elevator, ballGrabber, drivebase,
       DereefIndex.TOP_LEFT, 
       ReefLevel.HIGH_BALL), 
       Set.of(arm, elevator, ballGrabber, drivebase)));
-          driverXbox.start().whileTrue(Commands.none());
+          
           driverXbox.back().whileTrue(Commands.none());
           driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
           driverXbox.rightBumper().onTrue(Commands.none());
