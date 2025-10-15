@@ -82,7 +82,7 @@ public class BallGrabber extends SubsystemBase {
 
 
     public void stop(){
-        grabberMotor.set(-0.05);
+        grabberMotor.set(0.1);
     }
 
     public double getMotorVelocity(){

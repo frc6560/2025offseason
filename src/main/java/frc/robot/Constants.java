@@ -100,11 +100,11 @@ public final class Constants
         public static final double L2 = 5;///*5*/ HeightToRotations(32);
         public static final double L3 = 10;///*10*/HeightToRotations(47.625);
         public static final double L4 = 15;///*15*/ HeightToRotations(72);
-        public static final double REMOVEBALLL2 = 1.89;///*4*/ HeightToRotations(32 + 8.125);
-        public static final double REMOVEBALLL3 = 7.2;///*8*/ HeightToRotations(47.625 + 8.125);
+        public static final double REMOVEBALLL2 = 0.2;///*4*/ HeightToRotations(32 + 8.125);
+        public static final double REMOVEBALLL3 = 14;///*8*/ HeightToRotations(47.625 + 8.125);
         public static final double SHOOTBALL = 18;///*18*/ HeightToRotations(76 + 8.125);
-        public static final double L2BALL = 3;//HeightToRotations(32 + 8.125);
-        public static final double L3BALL = 5;//HeightToRotations(47.625 + 8.125);
+        public static final double L2BALL = 1.8;//HeightToRotations(32 + 8.125);
+        public static final double L3BALL = 6.7;//HeightToRotations(47.625 + 8.125); 677777777777 haahahahahahahahahahhahahahahaha
         public static final double STOW = 0.2;//HeightToRotations(18);
         public static final double GROUNDBALL = 0.2;//HeightToRotations(20);
     
@@ -154,7 +154,7 @@ public final class Constants
 
     /** Arm Setpoints (Degrees) */
     public static final double STOW_POSITION_DEG = -3.0;
-    public static final double PICKUP_POSITION_DEG = -88;
+    public static final double PICKUP_POSITION_DEG = -95;
     public static final double REEF_POSITION_DEG_low = -19; //11.0+90.0;
     public static final double REEF_POSITION_DEG_high = -19; //11.0+90.0;
     public static final double BARGE = 0.0; //31.0+90.0;
