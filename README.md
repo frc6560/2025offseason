@@ -5,8 +5,7 @@ square swerve drives. The project is documented
 on [here](https://github.com/BroncBotz3481/YAGSL/wiki). The JSON documentation can also be
 found [here](docs/START.md)
 
-This example is intended to be a starting place on how to use YAGSL. By no means is this intended to
-be the base of your robot project. YAGSL provides an easy way to generate a SwerveDrive which can be
+This example is intended to be a starting place on how to use YAGSL. YAGSL provides an easy way to generate a SwerveDrive which can be
 used in both TimedRobot and Command-Based Robot templates.
 
 
