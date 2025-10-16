@@ -27,6 +27,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -213,6 +214,6 @@ SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.co
     }
 
     public Command getAutonomousCommand() {
-    return new PathPlannerAuto("Tidal_Leave_Auto", true);
+      return Commands.run(() -> drivebase.drive(new ChassisSpeeds(-0.5,0,0)), drivebase).withTimeout(4);
   }
 }
