@@ -21,6 +21,8 @@ import frc.robot.subsystems.SubsystemManager;
 import frc.robot.commands.SubsystemManagerCommand;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -211,8 +213,6 @@ SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.co
     }
 
     public Command getAutonomousCommand() {
-        return null; // Replace with your auto
-
-        
-    }
+    return new PathPlannerAuto("Tidal_Leave_Auto", true);
+  }
 }
