@@ -48,7 +48,11 @@ public class BallGrabber extends SubsystemBase {
     private static final double MAX_CURRENT_RUNNING = 30; 
     private static final double BALL_DETECTION_DISTANCE = 0.4; //  threshold to detect if a ball is present
     
-
+    private long lastBurstTime = 0;
+    private static final long BURST_DURATION = 500; // milliseconds
+    private static final long BURST_INTERVAL = 1500; // milliseconds between bursts
+    private boolean isBursting = false;
+    
 
 
     //   private final NetworkTable ntTable = NetworkTableInstance.getDefault().getTable("BallGrabber");
@@ -80,10 +84,20 @@ public class BallGrabber extends SubsystemBase {
     }
 
 
-
-    public void stop(){
-        grabberMotor.set(0.1);
+public void stop(){
+    long currentTime = System.currentTimeMillis();
+    
+    if (!isBursting && (currentTime - lastBurstTime) >= BURST_INTERVAL) {
+        // Start burst
+        grabberMotor.set(0.05);
+        isBursting = true;
+        lastBurstTime = currentTime;
+    } else if (isBursting && (currentTime - lastBurstTime) >= BURST_DURATION) {
+        // End burst
+        grabberMotor.set(0.02);
+        isBursting = false;
     }
+}
 
     public double getMotorVelocity(){
         return grabberMotor.get();
