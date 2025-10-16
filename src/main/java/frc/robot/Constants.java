@@ -128,8 +128,8 @@ public final class Constants
     public static final double kD = 0.0;
 
     /** Motion Constraints */
-    public static final double kMaxV = 50.0; // m/s
-    public static final double kMaxA = 50.0; // m/s^2
+    public static final double kMaxV = 128000; // m/s
+    public static final double kMaxA = 128000; // m/s^2
 
     /** Arm PID Gains */
     public static final double ARM_KP = 3.5;
