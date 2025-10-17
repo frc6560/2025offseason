@@ -195,7 +195,6 @@ public class Elevator extends SubsystemBase {
         ElevLeft.setControl(m_request);
         ElevRight.setControl(m_request);
         elevatorLift.setLength(m_request.Position);
-        System.out.println(m_request.Position);
         elevatorLift.setAngle(90);
     }
 }

@@ -101,7 +101,6 @@ public class SubsystemManagerCommand extends Command{
         } else if (controls.goToGroundBall()) { //Left Bumper (3 lines)
             subsystemManager.setWantedState(WantedSuperState.GroundBallIntake);
             subsystemManager.groundBallIntake();
-            System.out.println("running Ground Intake");
         }
 
         if (controls.runOuttake() ) { //Left Trigger

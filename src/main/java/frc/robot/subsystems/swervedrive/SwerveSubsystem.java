@@ -45,6 +45,7 @@ import org.json.simple.parser.ParseException;
 import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
+
 import swervelib.SwerveDriveTest;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
@@ -562,6 +563,18 @@ public class SwerveSubsystem extends SubsystemBase
   public void zeroGyro()
   {
     swerveDrive.zeroGyro();
+  }
+
+  public void zeroNoAprilTagsGyro() {
+    // 1. Zero the gyro sensor itself
+    zeroGyro();
+    
+    // 2. Reset odometry so the current position is kept and rotation is defined as 0°
+    Pose2d currentPose = getPose();
+    resetOdometry(new Pose2d(
+        currentPose.getTranslation(),
+        Rotation2d.fromDegrees(0)
+    ));
   }
 
   /**

@@ -68,7 +68,7 @@ public class RobotContainer {
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
   () -> driverXbox.getLeftY() * -1,
   () -> driverXbox.getLeftX() * -1)
-.withControllerRotationAxis(driverXbox::getRightX)
+  .withControllerRotationAxis(() -> -driverXbox.getRightX())
 .deadband(OperatorConstants.DEADBAND)
 .scaleTranslation(0.8)
 .allianceRelativeControl(true);
@@ -195,16 +195,16 @@ SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.co
     
           driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
           driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
-          driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+          driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroNoAprilTagsGyro)));
           driverXbox.back().whileTrue(drivebase.centerModulesCommand());
           driverXbox.leftBumper().onTrue(Commands.none());
           driverXbox.rightBumper().onTrue(Commands.none());
+          driverXbox.back().onTrue((Commands.runOnce(drivebase::zeroGyro)));
         } else
         {
           driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
           driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-          driverXbox.start().whileTrue(Commands.none());
-          driverXbox.back().whileTrue(Commands.none());
+          driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroNoAprilTagsGyro)));
           driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
           driverXbox.rightBumper().onTrue(Commands.none());
         }
@@ -215,8 +215,5 @@ SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.co
       return Commands.run(() -> drivebase.drive(new ChassisSpeeds(-0.5, 0, 0)), drivebase).withTimeout(4);
       
   }
-  public void resetHeading() {
-    // TODO Auto-generated method stub
-    this.drivebase.zeroGyro();
-  }
+  
 }

@@ -93,8 +93,8 @@ public class ManualControls {
       return secondXbox.getRightBumperButton();
     }
 
-    public boolean resetOdometry() {
-      return secondXbox.getBackButton();
+    public boolean zeroNoAprilTagsGyro() {
+      return secondXbox.getStartButton();
     }
   
 

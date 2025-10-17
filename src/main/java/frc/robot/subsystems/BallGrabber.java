@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix6.hardware.CANrange; 
 
-
+import edu.wpi.first.wpilibj.Timer;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -53,6 +53,8 @@ public class BallGrabber extends SubsystemBase {
     private static final long BURST_INTERVAL = 1500; // milliseconds between bursts
     private boolean isBursting = false;
     
+    private Timer stopDelayTimer = new Timer();
+    private boolean waitingToStop = false;
 
 
     //   private final NetworkTable ntTable = NetworkTableInstance.getDefault().getTable("BallGrabber");
@@ -69,8 +71,10 @@ public class BallGrabber extends SubsystemBase {
 
 
     public void periodic(){
-        if (hasBall()) {
-            System.out.println("Has ball");
+        if (waitingToStop && stopDelayTimer.hasElapsed(0.5)) {
+            stop(); // Actually stop the grabber
+            stopDelayTimer.stop();
+            waitingToStop = false;
         }
         
     }
@@ -89,15 +93,21 @@ public void stop(){
     
     if (!isBursting && (currentTime - lastBurstTime) >= BURST_INTERVAL) {
         // Start burst
-        grabberMotor.set(0.05);
+        grabberMotor.set(0.15);
         isBursting = true;
         lastBurstTime = currentTime;
     } else if (isBursting && (currentTime - lastBurstTime) >= BURST_DURATION) {
         // End burst
-        grabberMotor.set(0.02);
+        grabberMotor.set(0.03);
         isBursting = false;
     }
 }
+
+    public void startDelayedStop() {
+        stopDelayTimer.reset();
+        stopDelayTimer.start();
+        waitingToStop = true;
+    }
 
     public double getMotorVelocity(){
         return grabberMotor.get();
