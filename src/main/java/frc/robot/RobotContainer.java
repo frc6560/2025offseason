@@ -215,4 +215,8 @@ SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.co
       return Commands.run(() -> drivebase.drive(new ChassisSpeeds(-0.5, 0, 0)), drivebase).withTimeout(4);
       
   }
+  public void resetHeading() {
+    // TODO Auto-generated method stub
+    this.drivebase.zeroGyro();
+  }
 }
